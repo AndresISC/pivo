@@ -10,30 +10,25 @@ var users = require('./routes/users');
 var app = express();
 
 //Models
-var settlementType;
-var userType;
-var user;
-var settlement;
-var promotion;
-var settlementGallery;
+var SettlementType;
+var UserType;
+var User;
+var Settlement;
+var Promotion;
+var SettlementGallery;
 
 //Load environment variables
 require('dotenv').load();
 
 //Load and sync the database
 var bootstrap = require('./models/bootstrap.js')
-bootstrap.init( sequelize => {
-    promotion = sequelize.import('./models/Promotion')
-
-    userType = sequelize.import('./models/UserType')
-    user = sequelize.import('./models/User')
-
-    settlementGallery = sequelize.import('./models/settlementGallery')
-    settlementType = sequelize.import('./models/SettlementType')
-    settlement = sequelize.import('./models/Settlement')
-
-    //Will delete all the tables and recreate them. Use carefully
-    sequelize.sync({force: true})
+bootstrap.init( models => {
+  settlementType = models.SettlementType
+  UserType = models.UserType
+  User = models.User
+  Settlement = models.Settlement
+  Promotion = models.Promotion
+  SettlementGallery = models.SettlementGallery
 })
 
 
