@@ -7,8 +7,35 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-
 var app = express();
+
+//Models
+var settlementType;
+var userType;
+var user;
+var settlement;
+var promotion;
+var settlementGallery;
+
+//Load environment variables
+require('dotenv').load();
+
+//Load and sync the database
+var bootstrap = require('./models/bootstrap.js')
+bootstrap.init( sequelize => {
+    promotion = sequelize.import('./models/Promotion')
+
+    userType = sequelize.import('./models/UserType')
+    user = sequelize.import('./models/User')
+
+    settlementGallery = sequelize.import('./models/settlementGallery')
+    settlementType = sequelize.import('./models/SettlementType')
+    settlement = sequelize.import('./models/Settlement')
+
+    //Will delete all the tables and recreate them. Use carefully
+    sequelize.sync({force: true})
+})
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
