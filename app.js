@@ -1,3 +1,6 @@
+//Load environment variables
+require('dotenv').load();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -7,30 +10,13 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var bootstrap = require('./models/bootstrap')
+
 var app = express();
 
-//Models
-var SettlementType;
-var UserType;
-var User;
-var Settlement;
-var Promotion;
-var SettlementGallery;
-
-//Load environment variables
-require('dotenv').load();
-
-//Load and sync the database
-var bootstrap = require('./models/bootstrap.js')
-bootstrap.init( models => {
-  settlementType = models.SettlementType
-  UserType = models.UserType
-  User = models.User
-  Settlement = models.Settlement
-  Promotion = models.Promotion
-  SettlementGallery = models.SettlementGallery
-})
-
+//Check if the database is already created and sync it. If it doesn't exist, then create it.
+//CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
+bootstrap.load({ force: true })
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
