@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   },
   {
     underscored: true,
-    tableName: 'user',
+    tableName: 'pivo_user',
 
     classMethods: {
       isValidPassword: function(password, passwd, next, user){
@@ -50,15 +50,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   })
 
-  User.hook('beforeCreate', function(user, fn){
-    const salt = bcrypt.getSalt(process.env.SALT_WORK_FACTOR, (err, salt) => {
-      return salt;
+  User.beforeCreate( (user, options) => {
+    return bcrypt.genSalt(10)
+    .then( salt => {
+      return bcrypt.hash(user.password, salt)
+      .then( hash => {
+        user.password = hash
+      })
+      .catch( err => {
+        console.log(err);
+      })
     })
-    bcrypt.hash(user.password, salt, null, (err, hash) => {
-      if (err) return next(err)
-
-      user.password = hash
-      return fn(null, user)
+    .catch( err => {
+      console.log(err);
     })
   })
 
