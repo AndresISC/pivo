@@ -34,21 +34,12 @@ module.exports = (sequelize, DataTypes) => {
   },
   {
     underscored: true,
-    tableName: 'pivo_user',
-
-    classMethods: {
-      isValidPassword: function(password, passwd, next, user){
-        bcrypt.compare(password, passwd, (err, matches) => {
-          if (err) console.log(err)
-          if (matches){
-            return next(null, user)
-          }else{
-            return next(null, false)
-          }
-        })
-      }
-    }
+    tableName: 'pivo_user'
   })
+
+  User.prototype.isValidPassword = function(password){
+    return bcrypt.compare(password, this.password)
+  }
 
   User.beforeCreate( (user, options) => {
     return bcrypt.genSalt(10)
@@ -67,6 +58,8 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   User.belongsTo(UserType, { as: 'Type', foreignKey: 'user_type_id' })
+
+  User.modelName = "User"
 
   return User
 }

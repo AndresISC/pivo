@@ -1,5 +1,4 @@
 var express = require('express');
-var jwt = require('jsonwebtoken');
 var auth = require('../passport/auth.js')()
 var User = require('../controllers/User.js')
 var router = express.Router();
@@ -8,15 +7,9 @@ var router = express.Router();
 router.get('/', auth.authenticate(),function(req, res, next) {
   res.send('respond with a resource');
 });
-
 router.post('/', User.postUser)
 
-//Testing. DON'T DELETE PLZ >:U
-router.get('/login', function(req, res){
-  var payload = { id: 1 }
-  var token = jwt.sign(payload, process.env.JWT_SECRET /*,{ expiresIn: process.env.EXPIRATION_TIME }*/ )
 
-  res.json({ token: token })
-});
+router.post('/login', User.login)
 
 module.exports = router;

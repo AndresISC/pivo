@@ -20,5 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'promotion',
   })
 
+  Promotion.modelName = "Promotion"
+
   return Promotion
 }

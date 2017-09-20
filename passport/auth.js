@@ -1,6 +1,6 @@
 const passport = require('passport')
 const passportJWT = require('passport-jwt')
-const { user } = require('../models/')
+const { User } = require('../models/')
 
 const ExtractJwt = passportJWT.ExtractJwt
 const Strategy = passportJWT.Strategy
@@ -15,8 +15,7 @@ const params = {
 
 module.exports = function(){
   const strategy = new Strategy(params, function(payload, next){
-    //Check if the user exists in the database
-    user.findById(payload.id)
+    User.findById(payload.id)
       .then( user => {
         if (user){
           return next(null, user)

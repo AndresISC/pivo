@@ -16,11 +16,18 @@ var db = {};
 fs
   .readdirSync(__dirname)
   .filter(function(file) {
-    return (file.indexOf(".") !== 0) && (file !== "index.js") && (file != "bootstrap.js");
+    return (file.indexOf(".") !== 0) &&
+           (file !== "index.js") &&
+           (file != "bootstrap.js") &&
+           (file != "Response.js");
   })
   .forEach(function(file) {
     var model = sequelize.import(path.join(__dirname, file));
-    db[model.name] = model;
+    //var modelName = model.name.charAt(0).toUpperCase() + model.name.slice(1)
+    var modelName = model.modelName
+    console.log(modelName);
+
+    db[modelName] = model;
   });
 
 db.sequelize = sequelize;

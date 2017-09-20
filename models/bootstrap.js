@@ -1,6 +1,7 @@
 const { Client } = require('pg')
 const db = require('./')
 
+
 function load(options) {
     const dbName = process.env.DATABASE_NAME,
           username = process.env.DB_USER,

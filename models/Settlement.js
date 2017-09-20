@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
   Settlement.belongsTo(SettlementType, { as: 'Type', foreignKey: 'settlement_type_id' })
   SettlementType.hasMany(Settlement, {as: 'Settlements', foreignKey: 'settlement_type_id'})
 
-  Settlement.hasMany(Promotion, {as:'Promotions'})
+  Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: 'settlement_id'})
 
   Settlement.hasMany(SettlementGallery, {as:'Photos'})
 
@@ -60,6 +60,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Settlement.belongsToMany(User, { as: 'FavoritedBy', through: 'favorites', foreignKey: 'settlement_id' })
   User.belongsToMany(Settlement, { as: 'Favorites', through: 'favorites', foreignKey: 'user_id' })
+
+  Settlement.modelName = "Settlement"
 
   return Settlement
 }
