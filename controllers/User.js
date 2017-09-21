@@ -1,6 +1,9 @@
 var jwt = require('jsonwebtoken');
 var { User } = require('../models')
-var { Response, ApiError } = require('../models/Response.js')
+var { Response, ApiError } = require('../models/Response')
+var fileManager = require('./FileManager')
+var shortid = require('shortid');
+var path = require('path')
 
 function login(req, res){
   const body = req.body
@@ -45,12 +48,32 @@ function login(req, res){
 }
 
 function postUser(req, res){
+  if(req.files){
+    var imageName = 'user-' + shortid.generate() + '.jpg'
+    req.body.avatarPath = imageName
+  }
+
   User.create(req.body)
   .then( user => {
-    var response = Response.createOkResponse("Successful user creation", {user: user})
-    res.status(201).send(response)
+    if(req.files){
+      fileManager.save(req.files.image,
+                       req.body.avatarPath,
+                       path.join(__dirname, "../public/images/users"))
+      .then(_ => {
+        var response = Response.createOkResponse("Successful user creation", {user: user})
+        res.status(201).send(response)
+      })
+      .catch(err => {
+        var response = Response.createServerErrorResponse()
+        res.status(501).send(response)
+      })
+    }else{
+      var response = Response.createOkResponse("Successful user creation", {user: user})
+      res.status(201).send(response)
+    }
   })
   .catch( err => {
+    console.log(err);
       var response = Response.createErrorResponse("Validation failed", err.errors)
       res.status(422).send(response)
   })
