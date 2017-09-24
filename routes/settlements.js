@@ -3,6 +3,9 @@ var auth = require('../passport/auth.js')()
 var Settlement = require('../controllers/Settlement.js')
 var router = express.Router();
 
-router.get('/:id/promotions', auth.authenticate(), Settlement.getPromotions)
+//Authenticate the user whenever he makes a request to any of the next endpoints
+router.use(auth.authenticate())
+
+router.get('/:id/promotions', Settlement.getPromotions)
 
 module.exports = router;

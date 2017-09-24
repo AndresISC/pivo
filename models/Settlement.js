@@ -45,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'settlement',
   })
 
+  //Specify the relations of this model with other models
   Settlement.belongsTo(SettlementType, { as: 'Type', foreignKey: 'settlement_type_id' })
   SettlementType.hasMany(Settlement, {as: 'Settlements', foreignKey: 'settlement_type_id'})
 

@@ -37,15 +37,19 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'pivo_user'
   })
 
+  //Extend the model with a function used to compare a plain text password with the hashed password stored in the database
   User.prototype.isValidPassword = function(password){
     return bcrypt.compare(password, this.password)
   }
 
+  //Trigger to hash a plain text password before it gets stored in the database
   User.beforeCreate( (user, options) => {
     return bcrypt.genSalt(10)
     .then( salt => {
+      //Hash the password
       return bcrypt.hash(user.password, salt)
       .then( hash => {
+        //Update the user with the new hashed password
         user.password = hash
       })
       .catch( err => {

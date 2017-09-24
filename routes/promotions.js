@@ -3,7 +3,9 @@ var auth = require('../passport/auth.js')()
 var Promotion = require('../controllers/Promotion.js')
 var router = express.Router();
 
-/* GET users listing. */
-router.delete('/:id', auth.authenticate(), Promotion.deletePromotion);
+//Authenticate the user whenever he makes a request to any of the next endpoints
+router.use(auth.authenticate())
+
+router.delete('/:id',  Promotion.deletePromotion);
 
 module.exports = router;
