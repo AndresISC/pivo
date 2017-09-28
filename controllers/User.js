@@ -87,7 +87,80 @@ function postUser(req, res){
   })
 }
 
+function getUsers(req, res){
+  var orderByColumn = (typeof req.query.orderByColumn === 'undefined') ? 'created_at' : req.query.orderByColumn
+  var lastRowId = (typeof req.query.lastRowId === 'undefined') ? '-1' : req.query.lastRowId
+  var lastRowId2 = (typeof req.query.lastRowId2 === 'undefined') ? '12-31-2020' : req.query.lastRowId2
+  var limit = (typeof req.query.limit === 'undefined') ? '15' : req.query.limit
+  var sorting = (typeof req.query.sorting === 'undefined') ? 'DESC' : req.query.sorting
+
+  var cond = {
+    id:{
+      $lt: lastRowId
+    }
+  }
+  if (typeof req.query.lastRowId2 !== 'undefined'){
+    cond =
+    {
+      $or:[
+        {
+          [orderByColumn]:{
+            $lt: lastRowId2
+          }
+        },{
+          $and:[
+            {
+              [orderByColumn]: lastRowId2
+            },{
+              id:{
+                $lt: lastRowId
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+  User.findAll({
+    where: cond,
+    order:[
+      [orderByColumn, sorting],
+      ['id', 'DESC']
+    ],
+    limit: limit
+  })
+  .then(e => {
+    console.log();
+    res.json(e)
+  })
+  .catch(e => {
+    console.log(e);
+    res.send(e)
+  })
+
+  /*User.findAll({
+    where: {
+      id:{
+        $gt: lastRowId
+      }
+    },
+    order:[
+      [orderByColumn, sorting],
+      ['id', 'DESC']
+    ],
+    limit: limit
+  })
+  .then(users => {
+    res.json(users)
+  })
+  .catch(err => {
+    console.error(err);
+    res.error(err)
+  })*/
+}
+
 module.exports = {
   postUser,
+  getUsers,
   login
 }
