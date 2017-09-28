@@ -30,6 +30,7 @@
 
 <script>
   export default {
+    name: 'aa',
     data () {
       return {
         search: '',
@@ -157,9 +158,7 @@
     height: 90px !important;
   }
 
-  body{
-    padding: 30px;
-  }
+  
 
 
 </style>

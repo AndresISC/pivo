@@ -29,28 +29,25 @@ function login(req, res){
         else{
           var error = new ApiError("Passwords didn't match", "authError")
           var response = Response.createErrorResponse("Login failes", {errors: [error]})
-
           res.status(401).send(response)
         }
       })
       .catch(err => {
         var response = Response.createServerErrorResponse()
-
         res.status(501).send(response)
       })
     }else{
       var error = new ApiError("User not found", "authError")
       var response = Response.createErrorResponse("Login failed", {errors: [error]})
-
       res.status(401).send(response)
     }
   })
   .catch(err => {
     var response = Response.createServerErrorResponse()
-
     res.status(501).send(response)
   })
 }
+
 
 function postUser(req, res){
   //If the request contains an avatar image file, then generate a random unique name for it
@@ -81,82 +78,20 @@ function postUser(req, res){
     }
   })
   .catch( err => {
-    console.log(err);
-      var response = Response.createErrorResponse("Validation failed", err.errors)
-      res.status(422).send(response)
+    var response = Response.createErrorResponse("Validation failed", err.errors)
+    res.status(422).send(response)
   })
 }
 
 function getUsers(req, res){
-  var orderByColumn = (typeof req.query.orderByColumn === 'undefined') ? 'created_at' : req.query.orderByColumn
-  var lastRowId = (typeof req.query.lastRowId === 'undefined') ? '-1' : req.query.lastRowId
-  var lastRowId2 = (typeof req.query.lastRowId2 === 'undefined') ? '12-31-2020' : req.query.lastRowId2
-  var limit = (typeof req.query.limit === 'undefined') ? '15' : req.query.limit
-  var sorting = (typeof req.query.sorting === 'undefined') ? 'DESC' : req.query.sorting
-
-  var cond = {
-    id:{
-      $lt: lastRowId
-    }
-  }
-  if (typeof req.query.lastRowId2 !== 'undefined'){
-    cond =
-    {
-      $or:[
-        {
-          [orderByColumn]:{
-            $lt: lastRowId2
-          }
-        },{
-          $and:[
-            {
-              [orderByColumn]: lastRowId2
-            },{
-              id:{
-                $lt: lastRowId
-              }
-            }
-          ]
-        }
-      ]
-    }
-  }
-  User.findAll({
-    where: cond,
-    order:[
-      [orderByColumn, sorting],
-      ['id', 'DESC']
-    ],
-    limit: limit
-  })
+  User.seek(req)
   .then(e => {
-    console.log();
     res.json(e)
   })
   .catch(e => {
     console.log(e);
     res.send(e)
   })
-
-  /*User.findAll({
-    where: {
-      id:{
-        $gt: lastRowId
-      }
-    },
-    order:[
-      [orderByColumn, sorting],
-      ['id', 'DESC']
-    ],
-    limit: limit
-  })
-  .then(users => {
-    res.json(users)
-  })
-  .catch(err => {
-    console.error(err);
-    res.error(err)
-  })*/
 }
 
 module.exports = {

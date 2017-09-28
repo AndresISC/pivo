@@ -29,6 +29,13 @@ fs
     //Import the model of each file
     var model = sequelize.import(path.join(__dirname, file));
     var modelName = model.modelName
+    //Extend every model with a 'seek' function to perform key-value pagination
+    model.seek = function(req){
+      var pagination = require('../utils/Pagination')
+      var body = pagination.getBody(req)
+      return model.findAll(body)
+    }
+
 
     //Store every model in the exported JSON
     db[modelName] = model;
