@@ -11,13 +11,8 @@
       :rows-per-page-text="rowsPerPageText"
       class="elevation-1"
     >
-      <template slot="headerCell" scope="props">
-        <span v-tooltip:bottom="{ 'html': props.header.text }">
-          {{ props.header.text }}
-        </span>
-      </template>
       <template slot="items" scope="props">
-        <td  class="text-xs-center"><img class="avatar" :src="props.item.avatar"/></td>
+        <td  class="text-xs-center"><img class="avatar" :src="props.item.avatarPath"/></td>
         <td  class="text-xs-right">{{ props.item.firstName }}</td>
         <td  class="text-xs-right">{{ props.item.lastName }}</td>
         <td  class="text-xs-right">{{ props.item.email }}</td>
@@ -26,26 +21,23 @@
   </v-app>
 </template>
 
-
-
 <script>
+  import userService from '../api/User'
+  import pagination from '../utils/Pagination'
+  import { PaginatedDataTable } from '../utils/PaginatedDataTable'
+
   export default {
-    name: 'aa',
+    mixins: [PaginatedDataTable],
     data () {
       return {
         search: '',
-        totalItems: 0,
-        items: [],
-        rowsPerPage: [15],
         rowsPerPageText:"Registros por página:",
-        loading: true,
-        pagination: {},
         headers: [
           { text: 'Avatar',
             align: 'center',
             sortable: false,
             align:'center',
-            value: 'avatar'
+            value: 'avatarPath'
           },
           {
             text: 'Nombre',
@@ -60,88 +52,22 @@
         ]
       }
     },
-    watch: {
-      pagination: {
-        handler () {
-          this.getDataFromApi()
-            .then(data => {
-              this.items = data.items
-              this.totalItems = data.total
-            })
-        },
-        deep: true
-      }
-    },
-    mounted () {
-      this.getDataFromApi()
-        .then(data => {
-          this.items = data.items
-          this.totalItems = data.total
-        })
-    },
     methods: {
-      getDataFromApi () {
-        this.loading = true
-        return new Promise((resolve, reject) => {
-          const { sortBy, descending, page, rowsPerPage } = this.pagination
-
-          let items = this.getDesserts()
-          const total = items.length
-
-          if (this.pagination.sortBy) {
-            items = items.sort((a, b) => {
-              const sortA = a[sortBy]
-              const sortB = b[sortBy]
-
-              if (descending) {
-                if (sortA < sortB) return 1
-                if (sortA > sortB) return -1
-                return 0
-              } else {
-                if (sortA < sortB) return -1
-                if (sortA > sortB) return 1
-                return 0
-              }
-            })
-          }
-
-          if (rowsPerPage > 0) {
-            items = items.slice((page - 1) * rowsPerPage, page * rowsPerPage)
-          }
-
-          setTimeout(() => {
-            this.loading = false
-            resolve({
-              items,
-              total
-            })
-          }, 1000)
+      getDataFromApi(){
+        this.getUsers()
+        .then(data => {
+          var newPage = this.pagination.page + ''
+          this.loading= false
+          this.items = data.data
+          this.totalItems = 14
+          this.cachedItems[newPage] = data.data
         })
       },
-      getDesserts () {
-        return [
-          {
-            value: false,
-            firstName: 'Arturo',
-            lastName: "Gasca Ortega",
-            email: "agasca1994@gmail.com",
-            avatar: "http://ironmaiden.com/media/images/24-bit-flac.jpg"
-          },
-          {
-            value: false,
-            firstName: 'Arturo',
-            lastName: "Gasca Ortega",
-            email: "agasca1994@gmail.com",
-            avatar: "http://ironmaiden.com/media/images/24-bit-flac.jpg"
-          },
-          {
-            value: false,
-            firstName: 'Arturo',
-            lastName: "Gasca Ortega",
-            email: "agasca1994@gmail.com",
-            avatar: "http://ironmaiden.com/media/images/24-bit-flac.jpg"
-          }
-        ]
+
+      getUsers () {
+        this.loading = true
+        let params = pagination.getBody(this.items, this.pagination)
+        return userService.getUsers(params)
       }
     }
   }
@@ -157,8 +83,4 @@
   td{
     height: 90px !important;
   }
-
-  
-
-
 </style>
