@@ -7,7 +7,7 @@ export const PaginatedDataTable = {
       pagination: {},
       lastPagination: {},
       totalItems: 0,
-      rowsPerPage: [4]
+      rowsPerPage: [15]
     }
   },
   watch: {

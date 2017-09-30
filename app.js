@@ -22,7 +22,7 @@ var app = express();
 
 //Check if the database is already created and sync it. If it doesn't exist, then create it.
 //CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
-bootstrap.load()
+bootstrap.load({force: true})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,8 +32,8 @@ app.set('views', path.join(__dirname, 'views'));
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

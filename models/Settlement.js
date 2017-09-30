@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: { isUrl: true }
     },
-    facebook_url: {
+    facebookUrl: {
       type: DataTypes.STRING,
       field: 'facebook_url',
       validate: { isUrl: true }
@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     longitude: {
       type: DataTypes.DECIMAL
+    },
+    imagePath:{
+      type: DataTypes.STRING,
+      field: 'image_path'
     }
   },{
     underscored: true,

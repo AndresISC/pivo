@@ -6,6 +6,7 @@ var shortid = require('shortid');
 var path = require('path')
 
 function login(req, res){
+  console.log(req.body);
   const body = req.body
   const email = body.email
   //Find a user with the submitted email

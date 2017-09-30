@@ -38,7 +38,8 @@ export default {
     return {
       items: [
           { title: 'Inicio', icon: 'home', link:"/" },
-          { title: 'Usuarios', icon: 'account_box', link:"/users" }
+          { title: 'Usuarios', icon: 'account_box', link:"/users" },
+          { title: 'Negocios', icon: 'account_box', link:"/settlements" }
         ]
     }
   }

@@ -12,19 +12,23 @@
       class="elevation-1"
     >
       <template slot="items" scope="props">
-        <td  class="text-xs-center"><img class="avatar" :src="props.item.avatarPath"/></td>
-        <td  class="text-xs-right">{{ props.item.firstName }}</td>
-        <td  class="text-xs-right">{{ props.item.lastName }}</td>
+        <td  class="text-xs-center"><img class="avatar" :src="props.item.imagePath"/></td>
+        <td  class="text-xs-right">{{ props.item.name }}</td>
         <td  class="text-xs-right">{{ props.item.email }}</td>
+        <td  class="text-xs-right">{{ props.item.url }}</td>
+        <td  class="text-xs-right">{{ props.item.facebookUrl }}</td>
+        <td  class="text-xs-right">{{ props.item.phone }}</td>
+        <td  class="text-xs-right">{{ props.item.latitude }}</td>
+        <td  class="text-xs-right">{{ props.item.longitude }}</td>
       </template>
     </v-data-table>
   </v-app>
 </template>
 
 <script>
-  import userService from '../api/User'
+  import service from '../api/Settlement'
   import pagination from '../utils/Pagination'
-  import { PaginatedDataTable } from '../utils/PaginatedDataTable'
+  import { PaginatedDataTable } from '../mixins/PaginatedDataTable'
 
   export default {
     mixins: [PaginatedDataTable],
@@ -37,44 +41,56 @@
             align: 'center',
             sortable: false,
             align:'center',
-            value: 'avatarPath'
+            value: 'imagePath'
           },
           {
             text: 'Nombre',
-            value: 'firstName'
-          },
-          { text: 'Apellido',
-            value: 'lastName'
+            value: 'name'
           },
           { text: 'Correo',
             value: 'email'
-          }
+          },
+          { text: 'Sitio web',
+            value: 'url'
+          },
+          { text: 'Facebook',
+            value: 'facebookUrl'
+          },
+          { text: 'Teléfono',
+            value: 'phone'
+          },
+          { text: 'Latitud',
+            value: 'latitude'
+          },
+          { text: 'Longitud',
+            value: 'longitude'
+          },
         ]
       }
     },
     methods: {
       getDataFromApi(){
-        this.getUsers()
+        this.getSettlements()
         .then(data => {
           var newPage = this.pagination.page + ''
           this.loading= false
           this.items = data.data
-          this.totalItems = 14
+          this.totalItems = 21
           this.cachedItems[newPage] = data.data
         })
       },
 
-      getUsers () {
+      getSettlements () {
         this.loading = true
         let params = pagination.getBody(this.items, this.pagination)
-        return userService.getUsers(params)
+        return service.getSettlements(params)
       }
     }
   }
 </script>
 
 <style>
-  @import '../../node_modules/vuetify/dist/vuetify.min.css';
+  
   .avatar{
     width: 70px;
     height: 70px;
