@@ -68,12 +68,6 @@
 	      all_rights: 'Todos los derechos reservados'
 	    }
 	  },
-
-	  methods:{
-	    onSideIconClicked(){
-	      this.$emit('onSideIconClicked')
-	    }
-	  }
 	}
 
 </script>
