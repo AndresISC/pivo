@@ -36,18 +36,20 @@
 					         </v-flex>
 					    </v-container>
 					  </v-card-title>
-					  <v-footer class="pink lighten-1 white--text pa-2">
-					  	   <v-btn flat dark>{{ enter }}
-						      <v-icon right dark>send</v-icon>
-					  	   </v-btn>
-					  </v-footer>
+
+						<v-card-actions class="pink lighten-1 white--text pa-2">
+							<v-btn  flat dark>{{ enter }}
+							 <v-icon right dark>send</v-icon>
+							</v-btn>
+        		</v-card-actions>
+
 					</v-card>
 				</v-flex>
 				<v-flex xs4></v-flex>
 			</v-layout>
 		</v-container>
-		
-		<v-footer class="pa-3 pink lighten-1 white--text" fixed="true">
+
+		<v-footer class="pa-3 pink lighten-1 white--text" :fixed="true">
 		    <v-spacer>{{ footer_content }}</v-spacer>
 		    <div>© {{ all_rights }} {{  new Date().getFullYear() }}</div>
 		</v-footer>
