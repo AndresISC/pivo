@@ -28,7 +28,7 @@
 					              </v-text-field>
 					            <v-text-field
 					              name="password"
-					              label="Cotraseña"
+					              label="Contraseña"
 					              id="password"
 					              prepend-icon="lock"
 					              pink lighten-1>
