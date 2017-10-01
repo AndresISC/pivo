@@ -24,15 +24,24 @@
 					              label="Nombre de usuario"
 					              id="username"
 					              prepend-icon="perm_identity"
-					              pink lighten-1>
+					              v-model="username"
+					              required
+					              :rules="[() => username.length> 0 || 'Indica tu nombre de usuario']">
 					              </v-text-field>
+
 					            <v-text-field
 					              name="password"
 					              label="Contraseña"
 					              id="password"
 					              prepend-icon="lock"
-					              pink lighten-1>
+					              :append-icon="e1 ? 'visibility' : 'visibility_off' "
+					              :append-icon-cb="() => (e1 = !e1)"
+					              :type="e1 ? 'password' : 'text'"
+					              v-model="password"
+					              required
+					              :rules="[() => password.length > 0 || 'Indica tu contraseña' ]">
 					              </v-text-field>
+            				 <small>*Indica campo requerido</small>
 					         </v-flex>
 					    </v-container>
 					  </v-card-title>
@@ -50,8 +59,8 @@
 		</v-container>
 
 		<v-footer class="pa-3 pink lighten-1 white--text" :fixed="true">
-		    <v-spacer>{{ footer_content }}</v-spacer>
-		    <div>© {{ all_rights }} {{  new Date().getFullYear() }}</div>
+		    <v-spacer>{{ footer_content }} {{  new Date().getFullYear() }}</v-spacer>
+		    <div>{{ all_rights }}</div>
 		</v-footer>
 
 	</v-flex>
@@ -67,7 +76,10 @@
 	      inputs: 'Indica tus credenciales',
 	      enter: 'Entrar',
 	      footer_content: '© Pivo - Trademark',
-	      all_rights: 'Todos los derechos reservados'
+	      all_rights: 'Todos los derechos reservados',
+	      e1: true,
+	      username:'',
+	      password:''
 	    }
 	  },
 	}
