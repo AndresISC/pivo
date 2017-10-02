@@ -10,5 +10,4 @@ router.post('/', User.postUser)
 router.post('/login', User.login)
 
 
-
 module.exports = router;
