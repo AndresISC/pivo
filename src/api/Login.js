@@ -1,9 +1,7 @@
 import axios from 'axios'
 
 function userLogin(params){
-  var request = axios.post('http://localhost/users/login', {
-    params: params
-  })
+  var request = axios.post('http://localhost/users/login', params)
   return request
 }
 

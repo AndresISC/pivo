@@ -1,7 +1,7 @@
 <template>
-  <v-app>
-    <h1>Profile</h1>
-  </v-app>
+  <div>
+    <h6>Profile</h6>
+  </div>
 </template>
 
 
@@ -9,7 +9,7 @@
   export default {
     data () {
       return {
-        drawer: true,
+
       }
     }
   }

@@ -28,6 +28,9 @@
 
   export default {
     mixins: [PaginatedDataTable],
+    mounted(){
+      console.log("mounted");
+    },
     data () {
       return {
         search: '',

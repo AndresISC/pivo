@@ -1,5 +1,5 @@
 <template lang="">
-  <v-navigation-drawer absolute persistent light v-model="drawer" overflow>
+  <v-navigation-drawer absolute persistent light v-model="open" overflow>
     <v-toolbar flat class="transparent">
       <v-list class="pa-0">
         <v-list-tile avatar>
@@ -43,6 +43,7 @@ export default {
         ]
     }
   },
+
   computed: {
     open(){
       return this.drawer

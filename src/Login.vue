@@ -48,7 +48,7 @@
 						    </v-container>
 					    </v-form>
 						<v-card-actions class="pink lighten-1 white--text pa-2">
-							<v-btn  
+							<v-btn
 							@click="loginAttempt"
 							flat dark>{{ enter }}
 							 <v-icon right dark>send</v-icon>
@@ -104,16 +104,16 @@
 	  		if(!(this.username.length>0) || !(this.password.length>0))
 	  			this.snackbar_text = 'Indica tu usuario y contraseña'
 			if (this.$refs.loginForm.validate()) {
-	          	
+
 	          	let	params = {
 		  			email: this.username,
 		  			password: this.password
 		  		};
 		  		userLogin.userLogin(params)
 		  		.then(data => {
-
+						console.log(data.data.payload.token);
 		  		if(data.hasOwnProperty('token'))
-					this.snackbar_text = data;//'Acceso correcto, prro >:v'		  			
+					this.snackbar_text = data;//'Acceso correcto, prro >:v'
 	  			else
 	  				if(data.hasOwnProperty('error'))
 	  					this.snackbar_text = data;//'Usuario y contraseña incorrectos'

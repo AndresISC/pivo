@@ -10,8 +10,6 @@ let routes = [
     component: require('./components/Settlements.vue').default,
     children: [
       {
-        // UserProfile will be rendered inside User's <router-view>
-        // when /user/:id/profile is matched
         path: 'profile',
         component: require('./components/SettlementProfile.vue').default
       }

@@ -1,48 +1,48 @@
 <template>
-  <v-app style="padding: 20px">
-  <v-card class="card--flex-toolbar" >
-    <v-card-title>
-      <h5>Lista de negocios</h5>
-      <v-btn
-        absolute
-        dark
-        fab
-        top
-        left
-        class="pink"
-        style="margin-top: 80px;"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-    </v-card-title>
+  <div class="pl-3 pr-3">
+    <v-card class="card--flex-toolbar" >
+      <v-card-title>
+        <h5>Lista de negocios</h5>
+        <v-btn
+          absolute
+          dark
+          fab
+          top
+          left
+          class="pink"
+          style="margin-top: 80px;"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-card-title>
 
-    <v-data-table
-      v-bind:headers="headers"
-      v-bind:items="items"
-      v-bind:search="search"
-      v-bind:pagination.sync="pagination"
-      :rows-per-page-items="rowsPerPage"
-      :total-items="totalItems"
-      :loading="loading"
-      :rows-per-page-text="rowsPerPageText"
-      class="elevation-1"
-    >
-      <template slot="items" scope="props">
-        <td  class="text-xs-center"><img class="avatar" :src="props.item.imagePath"/></td>
-        <td  class="text-xs-right body-2">{{ props.item.name }}</td>
-        <td  class="text-xs-right body-2">{{ props.item.email }}</td>
-        <td  class="text-xs-right body-2">{{ props.item.phone }}</td>
-        <td  class="text-xs-right body-2"><a :href="props.item.url">{{ props.item.url }}</a></td>
-        <td  class="text-xs-right body-2"> <a :href="props.item.facebookUrl">{{ props.item.facebookUrl }}</a></td>
-        <td  class="text-xs-right body-2">
-          <v-btn icon class="pink--text" @click="selectSettlement(props.item)">
-            <v-icon>favorite</v-icon>
-          </v-btn>
-        </td>
-      </template>
-    </v-data-table>
-  </v-card>
-  </v-app>
+      <v-data-table
+        v-bind:headers="headers"
+        v-bind:items="items"
+        v-bind:search="search"
+        v-bind:pagination.sync="pagination"
+        :rows-per-page-items="rowsPerPage"
+        :total-items="totalItems"
+        :loading="loading"
+        :rows-per-page-text="rowsPerPageText"
+        class="elevation-1"
+      >
+        <template slot="items" scope="props">
+          <td  class="text-xs-center"><img class="avatar" :src="props.item.imagePath"/></td>
+          <td  class="text-xs-right body-2">{{ props.item.name }}</td>
+          <td  class="text-xs-right body-2">{{ props.item.email }}</td>
+          <td  class="text-xs-right body-2">{{ props.item.phone }}</td>
+          <td  class="text-xs-right body-2"><a :href="props.item.url">{{ props.item.url }}</a></td>
+          <td  class="text-xs-right body-2"> <a :href="props.item.facebookUrl">{{ props.item.facebookUrl }}</a></td>
+          <td  class="text-xs-right body-2">
+            <v-btn icon class="pink--text" @click.stop="selectSettlement(props.item)">
+              <v-icon>favorite</v-icon>
+            </v-btn>
+          </td>
+        </template>
+      </v-data-table>
+    </v-card>
+  </div>
 </template>
 
 <script>
