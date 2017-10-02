@@ -2,7 +2,8 @@ import axios from 'axios'
 
 function userLogin(params){
   var request = axios.post('http://localhost/users/login', {
-    params: params
+    email: params.email,
+    password: params.password
   })
   return request
 }

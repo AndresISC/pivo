@@ -111,19 +111,18 @@
 		  		};
 		  		userLogin.userLogin(params)
 		  		.then(data => {
-
-		  		if(data.hasOwnProperty('token'))
-					this.snackbar_text = data;//'Acceso correcto, prro >:v'		  			
+		  		let token = data.data.payload.token;
+		  		if( token.length > 0 )
+					this.snackbar_text = 'Acceso correcto, prro >:v' //router.push('./App')		  			
 	  			else
-	  				if(data.hasOwnProperty('error'))
-	  					this.snackbar_text = data;//'Usuario y contraseña incorrectos'
+	  				if(!(token.length>0))
+	  					this.snackbar_text = 'Usuario y contraseña incorrectos'
 	  				else
-	  					this.snackbar_text = data;//'Ha ocurrido un error'
+	  					this.snackbar_text = 'Algo pasó mal'
 		  		})
 		  		.catch(data => {
-	  					this.snackbar_text = data;//'Ha ocurrido un error'
+	  					this.snackbar_text = 'Se presentó un error'
 		  		})
-
 			}
 	  		this.wrongLogin = true;
 	  	}
