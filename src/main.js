@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import App from './login.vue'//'./App.vue'
+import App from './App.vue'
 import Event from './utils/EventDispatcher.js'
 import router from './routes'
 import VueRouter from 'vue-router'

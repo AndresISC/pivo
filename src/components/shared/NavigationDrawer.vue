@@ -42,6 +42,11 @@ export default {
           { title: 'Negocios', icon: 'account_box', link:"/settlements" }
         ]
     }
+  },
+  computed: {
+    open(){
+      return this.drawer
+    }
   }
 }
 </script>

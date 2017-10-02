@@ -1,5 +1,21 @@
 <template>
-  <v-app>
+  <v-app style="padding: 20px">
+  <v-card class="card--flex-toolbar" >
+    <v-card-title>
+      <h5>Lista de negocios</h5>
+      <v-btn
+        absolute
+        dark
+        fab
+        top
+        left
+        class="pink"
+        style="margin-top: 80px;"
+      >
+        <v-icon>add</v-icon>
+      </v-btn>
+    </v-card-title>
+
     <v-data-table
       v-bind:headers="headers"
       v-bind:items="items"
@@ -13,15 +29,19 @@
     >
       <template slot="items" scope="props">
         <td  class="text-xs-center"><img class="avatar" :src="props.item.imagePath"/></td>
-        <td  class="text-xs-right">{{ props.item.name }}</td>
-        <td  class="text-xs-right">{{ props.item.email }}</td>
-        <td  class="text-xs-right">{{ props.item.url }}</td>
-        <td  class="text-xs-right">{{ props.item.facebookUrl }}</td>
-        <td  class="text-xs-right">{{ props.item.phone }}</td>
-        <td  class="text-xs-right">{{ props.item.latitude }}</td>
-        <td  class="text-xs-right">{{ props.item.longitude }}</td>
+        <td  class="text-xs-right body-2">{{ props.item.name }}</td>
+        <td  class="text-xs-right body-2">{{ props.item.email }}</td>
+        <td  class="text-xs-right body-2">{{ props.item.phone }}</td>
+        <td  class="text-xs-right body-2"><a :href="props.item.url">{{ props.item.url }}</a></td>
+        <td  class="text-xs-right body-2"> <a :href="props.item.facebookUrl">{{ props.item.facebookUrl }}</a></td>
+        <td  class="text-xs-right body-2">
+          <v-btn icon class="pink--text" @click="selectSettlement(props.item)">
+            <v-icon>favorite</v-icon>
+          </v-btn>
+        </td>
       </template>
     </v-data-table>
+  </v-card>
   </v-app>
 </template>
 
@@ -50,21 +70,20 @@
           { text: 'Correo',
             value: 'email'
           },
+          { text: 'Teléfono',
+            value: 'phone'
+          },
           { text: 'Sitio web',
             value: 'url'
           },
           { text: 'Facebook',
             value: 'facebookUrl'
           },
-          { text: 'Teléfono',
-            value: 'phone'
-          },
-          { text: 'Latitud',
-            value: 'latitude'
-          },
-          { text: 'Longitud',
-            value: 'longitude'
-          },
+          {
+            text: 'Más detalles',
+            value: 'id'
+          }
+
         ]
       }
     },
@@ -84,19 +103,28 @@
         this.loading = true
         let params = pagination.getBody(this.items, this.pagination)
         return service.getSettlements(params)
+      },
+
+      selectSettlement(settlement){
+        bus.fire('onSettlementSelected', settlement)
       }
     }
   }
 </script>
 
 <style>
-  
+
   .avatar{
-    width: 70px;
-    height: 70px;
+    width: 42px;
+    height: 42px;
   }
 
-  td{
-    height: 90px !important;
+  .card--flex-toolbar {
+    margin-top: -64px;
+    z-index: 2;
+  }
+
+  tr{
+    height: 65px !important;
   }
 </style>

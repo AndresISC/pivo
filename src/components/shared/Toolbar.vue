@@ -1,5 +1,5 @@
 <template >
-  <v-toolbar fixed dark class="pink lighten-1 elevation-0">
+  <v-toolbar extended fixed dark class="pink lighten-1 elevation-0">
     <v-toolbar-side-icon @click.stop="onSideIconClicked"></v-toolbar-side-icon>
     <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
   </v-toolbar>

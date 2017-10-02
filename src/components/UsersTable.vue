@@ -75,11 +75,11 @@
 
 <style>
   .avatar{
-    width: 70px;
-    height: 70px;
+    width: 42px;
+    height: 42px;
   }
 
-  td{
-    height: 90px !important;
+  tr{
+    height: 65px !important;
   }
 </style>
