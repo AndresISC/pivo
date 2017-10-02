@@ -22,7 +22,7 @@ var app = express();
 
 //Check if the database is already created and sync it. If it doesn't exist, then create it.
 //CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
-bootstrap.load({force: true})
+bootstrap.load({force: false})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 function getUsers(params){
-  var request = axios.get('http://192.168.1.69/users', {
+  var request = axios.get('http://localhost/users', {
     params: params
   })
   return request
