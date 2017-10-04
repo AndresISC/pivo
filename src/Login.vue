@@ -111,15 +111,9 @@
 		  		};
 		  		userLogin.userLogin(params)
 		  		.then(data => {
-<<<<<<< HEAD
-						console.log(data.data.payload.token);
-		  		if(data.hasOwnProperty('token'))
-					this.snackbar_text = data;//'Acceso correcto, prro >:v'
-=======
 		  		let token = data.data.payload.token;
 		  		if( token.length > 0 )
-					this.snackbar_text = 'Acceso correcto, prro >:v' //router.push('./App')		  			
->>>>>>> 696305e07f30190b62e314e178e9cf2afe4b00d0
+					this.snackbar_text = 'Acceso correcto, prro >:v' //router.push('./App')
 	  			else
 	  				if(!(token.length>0))
 	  					this.snackbar_text = 'Usuario y contraseña incorrectos'

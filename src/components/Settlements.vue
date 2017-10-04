@@ -22,22 +22,33 @@ import router from '../routes'
   export default {
     data () {
       return {
-        right: null
+        right: null,
+        selectedSettlement: null
       }
+    },
+    watch:{
+      right(){
+        if (!this.right){
+          router.replace('/settlements')
+        }
+      }
+    },
+    beforeRouteEnter: (to, from, next) => {
+        next( vm => {
+          if (to.path === "/settlements/profile"){
+            vm.right = true
+          }
+        })
     },
     components: {
       'app-settlements-table': settlementsTable,
       'app-settlement-profile': settlementProfile
     },
-    watch:{
-      right: function(v){
-        console.log(v);
-      }
-    },
     mounted(){
       bus.listen('onSettlementSelected', settlement => {
         this.right = true
-        router.push('/settlements/profile')
+        this.selectedSettlement = settlement
+        router.replace('/settlements/profile')
       })
     }
   }
