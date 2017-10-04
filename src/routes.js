@@ -8,6 +8,15 @@ let routes = [
   {
     path: '/settlements',
     component: require('./components/SettlementsTable.vue').default
+  },
+  {
+    name: 'home',
+    path: '/home/:token',
+    component: require('./components/shared/ToolbarWithDrawer.vue').default
+  },
+  {
+    path: '/',
+    component: require('./components/Login.vue').default
   }
 ]
 

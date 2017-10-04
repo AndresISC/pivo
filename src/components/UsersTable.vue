@@ -72,7 +72,7 @@
     }
   }
 </script>
-
+email
 <style>
   .avatar{
     width: 70px;
