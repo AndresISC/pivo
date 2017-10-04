@@ -1,21 +1,15 @@
 <template>
 <v-app>
-    <app-toolbar-with-drawer>
-      <main>
-        <router-view></router-view>
-      </main>
-    </app-toolbar-with-drawer>
+    <router-view>
+    </router-view>
 </v-app>
 </template>
 
 <script>
-import toolbar from './components/shared/ToolbarWithDrawer.vue'
+import loginComponent from './components/Login.vue'
 
 export default {
   name: 'app',
-  components:{
-    'app-toolbar-with-drawer': toolbar
-  },
   data () {
     return {
 
