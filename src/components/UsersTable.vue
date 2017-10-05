@@ -1,24 +1,42 @@
 <template>
-  <v-app>
-    <v-data-table
-      v-bind:headers="headers"
-      v-bind:items="items"
-      v-bind:search="search"
-      v-bind:pagination.sync="pagination"
-      :rows-per-page-items="rowsPerPage"
-      :total-items="totalItems"
-      :loading="loading"
-      :rows-per-page-text="rowsPerPageText"
-      class="elevation-1"
-    >
-      <template slot="items" scope="props">
-        <td  class="text-xs-center"><img class="avatar" :src="props.item.avatarPath"/></td>
-        <td  class="text-xs-right">{{ props.item.firstName }}</td>
-        <td  class="text-xs-right">{{ props.item.lastName }}</td>
-        <td  class="text-xs-right">{{ props.item.email }}</td>
-      </template>
-    </v-data-table>
-  </v-app>
+
+  <div class="pl-3 pr-3 pt-3">
+    <v-card class="card--flex-toolbar" >
+      <v-card-title>
+        <h5>Lista de usuarios</h5>
+        <v-btn
+          absolute
+          dark
+          fab
+          top
+          left
+          class="pink"
+          style="margin-top: 80px;"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <v-data-table
+        v-bind:headers="headers"
+        v-bind:items="items"
+        v-bind:search="search"
+        v-bind:pagination.sync="pagination"
+        :rows-per-page-items="rowsPerPage"
+        :total-items="totalItems"
+        :loading="loading"
+        :rows-per-page-text="rowsPerPageText"
+        class="elevation-1"
+      >
+        <template slot="items" scope="props">
+          <td  class="text-xs-center"><img class="avatar" :src="props.item.avatarPath"/></td>
+          <td  class="text-xs-right">{{ props.item.firstName }}</td>
+          <td  class="text-xs-right">{{ props.item.lastName }}</td>
+          <td  class="text-xs-right">{{ props.item.email }}</td>
+        </template>
+      </v-data-table>
+    </v-card>
+  </div>
 </template>
 
 <script>

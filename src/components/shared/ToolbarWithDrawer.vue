@@ -1,10 +1,6 @@
-
-
-
-
 <template>
-  <div id="example-2" toolbar>
-    <v-navigation-drawer absolute persistent light v-model="drawer" overflow :disable-route-watcher="true">
+  <div toolbar>
+    <v-navigation-drawer absolute persistent light v-model="drawer" overflow :disable-route-watcher="true" v-if="show">
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
           <v-list-tile avatar>
@@ -31,33 +27,44 @@
         </router-link>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar extended fixed class="indigo darken-4" dark>
-      <v-toolbar-side-icon @click.stop="toggleDrawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Toolbar</v-toolbar-title>
+
+    <v-toolbar fixed dark class="pink lighten-1 white--text">
+      <v-toolbar-side-icon v-if="show" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title> {{ title }} </v-toolbar-title>
     </v-toolbar>
     <slot></slot>
   </div>
 </template>
 
-
-
 <script>
-
-
 export default {
+  mounted(){
+    this.updateShow()
+  },
+  watch:{
+    $route(){
+      this.updateShow()
+    }
+  },
+  methods:{
+    updateShow(){
+      if (this.$route.name === "login"){
+        this.show = false
+      }else{
+        this.show = true
+      }
+    }
+  },
   data(){
     return {
+      title: 'Pivo',
+      show: true,
       drawer: false,
       items: [
-          { title: 'Inicio', icon: 'home', link:"/" },
+          { title: 'Inicio', icon: 'home', link:"/home" },
           { title: 'Usuarios', icon: 'account_box', link:"/users" },
           { title: 'Negocios', icon: 'account_box', link:"/settlements" }
         ]
-    }
-  },
-  methods: {
-    toggleDrawer(){
-      this.drawer = !this.drawer
     }
   }
 }

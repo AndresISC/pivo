@@ -1,11 +1,7 @@
 <template>
 	<div id="app">
 		<v-flex>
-			<v-toolbar class="pink lighten-1 white--text">
-				<v-toolbar-title>
-					{{ title }}
-				</v-toolbar-title>
-			</v-toolbar>
+
 			<v-container>
 				<v-layout row>
 					<v-flex xs4></v-flex>
@@ -19,7 +15,7 @@
 						  <v-card-title primary-title>
 						    <div class="subheading">{{ inputs }}</div>
 						  </v-card-title>
-						    <v-form v-model="loginForm" ref='loginForm'>
+						    <v-form ref='loginForm'>
 						    	<v-container grid-list-md text-xs-center>
 							    	<v-flex xs11>
 							            <v-text-field
@@ -49,7 +45,7 @@
 							    </v-container>
 						    </v-form>
 							<v-card-actions class="pink lighten-1 white--text pa-2">
-								<v-btn  
+								<v-btn
 								@click="loginAttempt"
 								flat dark>{{ enter }}
 								 <v-icon right dark>send</v-icon>
@@ -70,10 +66,6 @@
 					<v-flex xs4></v-flex>
 				</v-layout>
 			</v-container>
-			<v-footer class="pa-3 pink lighten-1 white--text" :fixed="true">
-			    <v-spacer>{{ footer_content }} {{  new Date().getFullYear() }}</v-spacer>
-			    <div>{{ all_rights }}</div>
-			</v-footer>
 		</v-flex>
 	</div>
 </template>
@@ -85,18 +77,17 @@
 	export default {
 	  data(){
 	    return {
-	      title: 'Pivo',
+
 	      login: 'Inicio de sesión',
 	      inputs: 'Indica tus credenciales',
 	      enter: 'Entrar',
-	      footer_content: '© Pivo - Trademark',
-	      all_rights: 'Todos los derechos reservados',
 	      snackbar_text: '',
 	      username:'',
 	      password:'',
 	      passwordField: true,
 	      wrongLogin:false,
-	      valid:false
+	      valid:false,
+				mode: 'vertical'
 	    }
 	  },
 	  methods:{
@@ -104,7 +95,7 @@
 	  		if(!(this.username.length>0) || !(this.password.length>0))
 	  			this.snackbar_text = 'Indica tu usuario y contraseña'
 			if (this.$refs.loginForm.validate()) {
-	          	
+
 	          	let	params = {
 		  			email: this.username,
 		  			password: this.password

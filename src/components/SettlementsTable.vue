@@ -1,5 +1,5 @@
 <template>
-  <div class="pl-3 pr-3">
+  <div class="pl-3 pr-3 pt-3">
     <v-card class="card--flex-toolbar" >
       <v-card-title>
         <h5>Lista de negocios</h5>
@@ -119,10 +119,7 @@
     height: 42px;
   }
 
-  .card--flex-toolbar {
-    margin-top: -64px;
-    z-index: 2;
-  }
+
 
   tr{
     height: 65px !important;

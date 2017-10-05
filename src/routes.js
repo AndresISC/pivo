@@ -12,9 +12,10 @@ let routes = [
   {
     name: 'home',
     path: '/home/:token',
-    component: require('./components/shared/ToolbarWithDrawer.vue').default
+    component: require('./components/UsersTable.vue').default
   },
   {
+    name: 'login',
     path: '/',
     component: require('./components/Login.vue').default
   }
