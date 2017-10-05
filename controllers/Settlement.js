@@ -20,8 +20,23 @@ function getPromotions(req, res){
   })
 }
 
+function getGallery(req, res){
+  var params = req.params
+  const settlement = Settlement.build(params)
+
+  settlement.getPhotos()
+  .then(photos => {
+    var response = Response.createOkResponse("Successful retrieval of photos", photos)
+    res.status(201).send(response)
+  })
+  .catch(err => {
+    console.log(err);
+    var response = Response.createServerErrorResponse()
+    res.status(501).send(response)
+  })
+}
+
 function getSettlements(req, res){
-  console.log("here");
   Settlement.seek(req)
   .then(e => {
     res.json(e)
@@ -36,7 +51,7 @@ function postSettlement(req, res){
   //If the request contains an avatar image file, then generate a random unique name for it
   if(req.files){
     var imageName = 'settlement-' + shortid.generate() + '.jpg'
-    req.body.imagePath = imageName
+    req.body.image = imageName
   }
 
   //Store the new user in the database
@@ -45,13 +60,14 @@ function postSettlement(req, res){
     //If the request contains an avatar image file, then save it in the public/images/users folder
     if(req.files){
       fileManager.save(req.files.image,
-                       req.body.avatarPath,
+                       req.body.image,
                        path.join(__dirname, "../public/images/settlements"))
       .then(_ => {
-        var response = Response.createOkResponse("Successful settlement creation", {user: user})
+        var response = Response.createOkResponse("Successful settlement creation", {settlement: settlement})
         res.status(201).send(response)
       })
       .catch(err => {
+        console.log(err);
         var response = Response.createServerErrorResponse()
         res.status(501).send(response)
       })
@@ -67,8 +83,23 @@ function postSettlement(req, res){
   })
 }
 
+function deleteSettlement(req, res){
+  var params = req.params
+  Settlement.destroy({ where: params, individualHooks: true })
+  .then(rowsDeleted => {
+    var response = Response.createOkResponse("Successful deleted", {deleted: rowsDeleted})
+    res.status(201).send(response)
+  })
+  .catch(err => {
+    var response = Response.createServerErrorResponse()
+    res.status(501).send(response)
+  })
+}
+
 module.exports = {
   getPromotions,
+  getGallery,
   getSettlements,
-  postSettlement
+  postSettlement,
+  deleteSettlement
 }

@@ -24,6 +24,7 @@ var app = express();
 //CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
 bootstrap.load({force: false})
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 //app.engine('html', require('ejs').renderFile);
@@ -39,6 +40,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public/images/users')));
+app.use(express.static(path.join(__dirname, 'public/images/settlements')));
 app.use(express.static('views'));
 app.use(fileUpload());
 

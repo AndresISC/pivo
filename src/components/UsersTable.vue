@@ -96,11 +96,11 @@
 email
 <style>
   .avatar{
-    width: 42px;
-    height: 42px;
+    width: 65px;
+    height: 65px;
   }
 
   tr{
-    height: 65px !important;
+    height: 70px !important;
   }
 </style>

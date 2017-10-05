@@ -54,7 +54,7 @@ function postUser(req, res){
   //If the request contains an avatar image file, then generate a random unique name for it
   if(req.files){
     var imageName = 'user-' + shortid.generate() + '.jpg'
-    req.body.avatarPath = imageName
+    req.body.avatar = imageName
   }
 
   //Store the new user in the database
@@ -63,7 +63,7 @@ function postUser(req, res){
     //If the request contains an avatar image file, then save it in the public/images/users folder
     if(req.files){
       fileManager.save(req.files.image,
-                       req.body.avatarPath,
+                       req.body.avatar,
                        path.join(__dirname, "../public/images/users"))
       .then(_ => {
         var response = Response.createOkResponse("Successful user creation", {user: user})
@@ -84,6 +84,19 @@ function postUser(req, res){
   })
 }
 
+function deleteUser(req, res){
+  var params = req.params
+  User.destroy({ where: params, individualHooks: true })
+  .then(rowsDeleted => {
+    var response = Response.createOkResponse("Successful deleted", {deleted: rowsDeleted})
+    res.status(201).send(response)
+  })
+  .catch(err => {
+    var response = Response.createServerErrorResponse()
+    res.status(501).send(response)
+  })
+}
+
 function getUsers(req, res){
   User.seek(req)
   .then(e => {
@@ -97,6 +110,7 @@ function getUsers(req, res){
 
 module.exports = {
   postUser,
+  deleteUser,
   getUsers,
   login
 }

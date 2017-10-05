@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const utils = require('../utils/ImageUtils.js')
 
 module.exports = (sequelize, DataTypes) => {
   const UserType = sequelize.import('./UserType')
@@ -27,10 +28,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: { notEmpty: true }
     },
-    avatarPath: {
+    avatar: {
       type: DataTypes.STRING,
-      field: 'avatar_path'
+      field: 'image'
+    },
+    avatarPath: {
+      type: new DataTypes.VIRTUAL(DataTypes.String, ['avatar']),
+      get: function() { return utils.generateURL(this.avatar) }
     }
+
   },
   {
     underscored: true,
@@ -41,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
   User.prototype.isValidPassword = function(password){
     return bcrypt.compare(password, this.password)
   }
+
+  User.afterDestroy((user, options) => {
+    return utils.deleteUserImage(user.avatar)
+  });
 
   //Trigger to hash a plain text password before it gets stored in the database
   User.beforeCreate( (user, options) => {

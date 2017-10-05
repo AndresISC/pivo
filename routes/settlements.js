@@ -8,6 +8,8 @@ var router = express.Router();
 
 router.get('/', Settlement.getSettlements)
 router.get('/:id/promotions', Settlement.getPromotions)
+router.get('/:id/gallery', Settlement.getGallery)
+router.delete('/:id', Settlement.deleteSettlement)
 router.post('/', Settlement.postSettlement)
 
 module.exports = router;

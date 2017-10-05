@@ -1,8 +1,9 @@
+var utils = require('../utils/ImageUtils.js')
 
 module.exports = (sequelize, DataTypes) => {
   const SettlementType = sequelize.import('./SettlementType')
   const Promotion = sequelize.import('./Promotion')
-  const SettlementGallery = sequelize.import('./SettlementGallery')
+  const SettlementGallery = sequelize.import('./Gallery')
   const User = sequelize.import('./User')
 
   var Settlement = sequelize.define('settlement', {
@@ -40,22 +41,29 @@ module.exports = (sequelize, DataTypes) => {
     longitude: {
       type: DataTypes.DECIMAL
     },
-    imagePath:{
+    image:{
       type: DataTypes.STRING,
-      field: 'image_path'
+      field: 'image'
+    },
+    imagePath: {
+      type: new DataTypes.VIRTUAL(DataTypes.String, ['image']),
+      get: function() { return utils.generateURL(this.image) }
     }
   },{
     underscored: true,
     tableName: 'settlement',
   })
 
+  Settlement.afterDestroy((settlement, options) => {
+    return utils.deleteSettlementImage(settlement.image)
+  });
+
   //Specify the relations of this model with other models
   Settlement.belongsTo(SettlementType, { as: 'Type', foreignKey: 'settlement_type_id' })
   SettlementType.hasMany(Settlement, {as: 'Settlements', foreignKey: 'settlement_type_id'})
 
   Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: 'settlement_id'})
-
-  Settlement.hasMany(SettlementGallery, {as:'Photos'})
+  Settlement.hasMany(SettlementGallery, {as:'Photos', foreignKey: 'settlement_id'})
 
   Settlement.belongsToMany(User, { as: 'Vistors', through: 'history', foreignKey: 'settlement_id' })
   User.belongsToMany(Settlement, { as: 'Visited', through: 'history', foreignKey: 'user_id' })
