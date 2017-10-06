@@ -42,8 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL
     },
     image:{
-      type: DataTypes.STRING,
-      field: 'image'
+      type: DataTypes.STRING
     },
     imagePath: {
       type: new DataTypes.VIRTUAL(DataTypes.String, ['image']),
@@ -62,7 +61,9 @@ module.exports = (sequelize, DataTypes) => {
   Settlement.belongsTo(SettlementType, { as: 'Type', foreignKey: 'settlement_type_id' })
   SettlementType.hasMany(Settlement, {as: 'Settlements', foreignKey: 'settlement_type_id'})
 
-  Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: 'settlement_id'})
+  Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: { field:'settlement_id', allowNull: false } })
+  Promotion.belongsTo(Settlement, {as: 'Settlement', foreignKey: { field:'settlement_id', allowNull: false } })
+
   Settlement.hasMany(SettlementGallery, {as:'Photos', foreignKey: 'settlement_id'})
 
   Settlement.belongsToMany(User, { as: 'Vistors', through: 'history', foreignKey: 'settlement_id' })

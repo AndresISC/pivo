@@ -1,24 +1,39 @@
-
+const utils = require('../utils/ImageUtils.js')
 module.exports = (sequelize, DataTypes) => {
   const Promotion = sequelize.define('promotion', {
     description: {
       type: DataTypes.TEXT,
     },
-    image_path:{
+    image:{
       type: DataTypes.STRING,
     },
-    start_date:{
+    startDate:{
       type: DataTypes.DATE,
+      field:'start_date',
       allowNull: false
     },
-    end_date:{
+    endDate:{
       type: DataTypes.DATE,
+      field:'end_date',
       allowNull: false
+    },
+    imagePath: {
+      type: new DataTypes.VIRTUAL(DataTypes.String, ['image']),
+      get: function() { return utils.generateURL(this.image) }
+    },
+    settlementId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'settlement_id'
     }
   },{
     underscored: true,
     tableName: 'promotion',
   })
+
+  Promotion.afterDestroy((promotion, options) => {
+    return utils.deletePromotionImage(promotion.image)
+  });
 
   Promotion.modelName = "Promotion"
 

@@ -1,8 +1,20 @@
-var { Settlement } = require('../models')
+var { Settlement, Promotion } = require('../models')
 var { Response, ApiError } = require('../models/Response')
 var fileManager = require('./FileManager')
 var shortid = require('shortid');
 var path = require('path')
+
+function postPromotion(req, res){
+  req.body.settlementId = req.params.id
+
+  Promotion.create(req.body)
+  .then(promotion => {
+      res.send(promotion)
+  })
+  .catch(err => {
+    res.send(err)
+  })
+}
 
 function getPromotions(req, res){
   var params = req.params
@@ -98,6 +110,7 @@ function deleteSettlement(req, res){
 
 module.exports = {
   getPromotions,
+  postPromotion,
   getGallery,
   getSettlements,
   postSettlement,
