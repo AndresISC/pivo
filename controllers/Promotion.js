@@ -3,7 +3,7 @@ var { Response, ApiError } = require('../models/Response')
 
 function deletePromotion(req, res){
   var params = req.params
-  Promotion.destroy({ where: params })
+  Promotion.destroy({ where: params, individualHooks: true })
   .then(rowsDeleted => {
     var response = Response.createOkResponse("Successful deleted", {deleted: rowsDeleted})
     res.status(201).send(response)

@@ -6,13 +6,35 @@ var path = require('path')
 
 function postPromotion(req, res){
   req.body.settlementId = req.params.id
+  if(req.files){
+    var imageName = 'promotion-' + shortid.generate() + '.jpg'
+    req.body.image = imageName
+  }
 
   Promotion.create(req.body)
-  .then(promotion => {
-      res.send(promotion)
+  .then( promotion => {
+    if(req.files){
+      fileManager.save(req.files.image,
+                       req.body.image,
+                       path.join(__dirname, "../public/images/promotions"))
+      .then(_ => {
+        var response = Response.createOkResponse("Successful promotion creation", {promotion: promotion})
+        res.status(201).send(response)
+      })
+      .catch(err => {
+        console.log(err);
+        var response = Response.createServerErrorResponse()
+        res.status(501).send(response)
+      })
+    }else{
+      var response = Response.createOkResponse("Successful promotion creation", {promotion: promotion})
+      res.status(201).send(response)
+    }
   })
-  .catch(err => {
-    res.send(err)
+  .catch( err => {
+    console.log(err);
+    var response = Response.createErrorResponse("Validation failed", err)
+    res.status(422).send(response)
   })
 }
 
@@ -97,12 +119,21 @@ function postSettlement(req, res){
 
 function deleteSettlement(req, res){
   var params = req.params
-  Settlement.destroy({ where: params, individualHooks: true })
-  .then(rowsDeleted => {
-    var response = Response.createOkResponse("Successful deleted", {deleted: rowsDeleted})
-    res.status(201).send(response)
+  Settlement.findById(req.params.id)
+  .then(settlement => {
+    settlement.destroy()
+    .then(_ => {
+      var response = Response.createOkResponse("Successful deleted", {deleted: 1})
+      res.status(201).send(response)
+    })
+    .catch(err => {
+      console.log(err);
+      var response = Response.createServerErrorResponse()
+      res.status(501).send(response)
+    })
   })
   .catch(err => {
+    console.log(err);
     var response = Response.createServerErrorResponse()
     res.status(501).send(response)
   })

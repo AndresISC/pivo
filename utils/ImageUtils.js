@@ -19,7 +19,7 @@ module.exports = {
     return fs.unlink(p)
   },
 
-  deletPromotionImage: function(image){
+  deletePromotionImage: function(image){
     var p = path.join(__dirname, '../public/images/promotions/' + image)
     return fs.unlink(p)
   },

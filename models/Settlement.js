@@ -61,8 +61,7 @@ module.exports = (sequelize, DataTypes) => {
   Settlement.belongsTo(SettlementType, { as: 'Type', foreignKey: 'settlement_type_id' })
   SettlementType.hasMany(Settlement, {as: 'Settlements', foreignKey: 'settlement_type_id'})
 
-  Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: { field:'settlement_id', allowNull: false } })
-  Promotion.belongsTo(Settlement, {as: 'Settlement', foreignKey: { field:'settlement_id', allowNull: false } })
+  Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true })
 
   Settlement.hasMany(SettlementGallery, {as:'Photos', foreignKey: 'settlement_id'})
 
