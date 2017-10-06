@@ -1,8 +1,42 @@
-var { Settlement, Promotion } = require('../models')
+var { Settlement, Promotion, Gallery } = require('../models')
 var { Response, ApiError } = require('../models/Response')
 var fileManager = require('./FileManager')
 var shortid = require('shortid');
 var path = require('path')
+
+function postGallery(req, res){
+  req.body.settlementId = req.params.id
+  if(req.files){
+    var imageName = 'gallery-' + shortid.generate() + '.jpg'
+    req.body.image = imageName
+  }
+
+  Gallery.create(req.body)
+  .then( gallery => {
+    if(req.files){
+      fileManager.save(req.files.image,
+                       req.body.image,
+                       path.join(__dirname, "../public/images/gallery"))
+      .then(_ => {
+        var response = Response.createOkResponse("Successful gallery creation", {gallery: gallery})
+        res.status(201).send(response)
+      })
+      .catch(err => {
+        console.log(err);
+        var response = Response.createServerErrorResponse()
+        res.status(501).send(response)
+      })
+    }else{
+      var response = Response.createOkResponse("Successful gallery creation", {gallery: gallery})
+      res.status(201).send(response)
+    }
+  })
+  .catch( err => {
+    console.log(err);
+    var response = Response.createErrorResponse("Validation failed", err)
+    res.status(422).send(response)
+  })
+}
 
 function postPromotion(req, res){
   req.body.settlementId = req.params.id
@@ -145,5 +179,6 @@ module.exports = {
   getGallery,
   getSettlements,
   postSettlement,
-  deleteSettlement
+  deleteSettlement,
+  postGallery
 }

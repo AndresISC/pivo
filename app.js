@@ -15,6 +15,7 @@ var users = require('./routes/users');
 var settlementTypes = require('./routes/settlementTypes')
 var settlements = require('./routes/settlements')
 var promotions = require('./routes/promotions')
+var photos = require('./routes/gallery')
 
 var bootstrap = require('./models/bootstrap')
 
@@ -49,6 +50,7 @@ app.use('/users', users);
 app.use('/settlementTypes', settlementTypes)
 app.use('/settlements', settlements)
 app.use('/promotions', promotions)
+app.use('/photos', photos)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

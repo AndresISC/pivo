@@ -3,7 +3,7 @@ var utils = require('../utils/ImageUtils.js')
 module.exports = (sequelize, DataTypes) => {
   const SettlementType = sequelize.import('./SettlementType')
   const Promotion = sequelize.import('./Promotion')
-  const SettlementGallery = sequelize.import('./Gallery')
+  const Gallery = sequelize.import('./Gallery')
   const User = sequelize.import('./User')
 
   var Settlement = sequelize.define('settlement', {
@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Settlement.hasMany(Promotion, {as:'Promotions', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true })
 
-  Settlement.hasMany(SettlementGallery, {as:'Photos', foreignKey: 'settlement_id'})
+  Settlement.hasMany(Gallery, {as:'Photos', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true})
 
   Settlement.belongsToMany(User, { as: 'Vistors', through: 'history', foreignKey: 'settlement_id' })
   User.belongsToMany(Settlement, { as: 'Visited', through: 'history', foreignKey: 'user_id' })
