@@ -1,8 +1,6 @@
 var { Settlement } = require('../models')
 var { Response, ApiError } = require('../models/Response')
-var fileManager = require('./FileManager')
-var shortid = require('shortid');
-var path = require('path')
+var imageUtils = require('../utils/ImageUtils')
 
 function getSettlements(req, res){
   Settlement.seek(req)
@@ -15,21 +13,21 @@ function getSettlements(req, res){
   })
 }
 
-function postSettlement(req, res){
-  //If the request contains an avatar image file, then generate a random unique name for it
+function prepareForSave(req, res, next){
   if(req.files){
-    var imageName = 'settlement-' + shortid.generate() + '.jpg'
+    var imageName = imageUtils.generateImageName('settlement')
     req.body.image = imageName
   }
 
-  //Store the new user in the database
+  next()
+}
+
+function postSettlement(req, res){
+
   Settlement.create(req.body)
   .then( settlement => {
-    //If the request contains an avatar image file, then save it in the public/images/users folder
     if(req.files){
-      fileManager.save(req.files.image,
-                       req.body.image,
-                       path.join(__dirname, "../public/images/settlements"))
+      imageUtils.saveImage(req, 'settlements')
       .then(_ => {
         var response = Response.createOkResponse("Successful settlement creation", {settlement: settlement})
         res.status(201).send(response)
@@ -55,16 +53,21 @@ function deleteSettlement(req, res){
   var params = req.params
   Settlement.findById(req.params.id)
   .then(settlement => {
-    settlement.destroy()
-    .then(_ => {
-      var response = Response.createOkResponse("Successful deleted", {deleted: 1})
+    if (settlement){
+      settlement.destroy()
+      .then(_ => {
+        var response = Response.createOkResponse("Successful deleted", {deleted: 1})
+        res.status(201).send(response)
+      })
+      .catch(err => {
+        console.log(err);
+        var response = Response.createServerErrorResponse()
+        res.status(501).send(response)
+      })
+    }else{
+      var response = Response.createOkResponse("Successful deleted", {deleted: 0})
       res.status(201).send(response)
-    })
-    .catch(err => {
-      console.log(err);
-      var response = Response.createServerErrorResponse()
-      res.status(501).send(response)
-    })
+    }
   })
   .catch(err => {
     console.log(err);
@@ -76,5 +79,7 @@ function deleteSettlement(req, res){
 module.exports = {
   getSettlements,
   postSettlement,
-  deleteSettlement
+  deleteSettlement,
+
+  prepareForSave
 }

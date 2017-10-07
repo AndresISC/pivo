@@ -1,5 +1,6 @@
 var { Promotion, Settlement } = require('../models')
 var { Response, ApiError } = require('../models/Response')
+var imageUtils = require('../utils/ImageUtils')
 
 function deletePromotion(req, res){
   var params = req.params
@@ -30,19 +31,22 @@ function getPromotions(req, res){
   })
 }
 
-function postPromotion(req, res){
+function prepareForSave(req, res, next){
   req.body.settlementId = req.params.id
   if(req.files){
-    var imageName = 'promotion-' + shortid.generate() + '.jpg'
+    var imageName = imageUtils.generateImageName('promotion')
     req.body.image = imageName
   }
+
+  next()
+}
+
+function postPromotion(req, res){
 
   Promotion.create(req.body)
   .then( promotion => {
     if(req.files){
-      fileManager.save(req.files.image,
-                       req.body.image,
-                       path.join(__dirname, "../public/images/promotions"))
+      imageUtils.saveImage(req, 'promotions')
       .then(_ => {
         var response = Response.createOkResponse("Successful promotion creation", {promotion: promotion})
         res.status(201).send(response)
@@ -67,5 +71,7 @@ function postPromotion(req, res){
 module.exports = {
   deletePromotion,
   postPromotion,
-  getPromotions
+  getPromotions,
+
+  prepareForSave
 }

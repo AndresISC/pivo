@@ -49,7 +49,9 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.afterDestroy((user, options) => {
-    return utils.deleteUserImage(user.avatar)
+    if (user.avatar){
+      return utils.deleteImage('users/' + user.avatar)
+    }
   });
 
   //Trigger to hash a plain text password before it gets stored in the database

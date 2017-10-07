@@ -21,7 +21,9 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Gallery.afterDestroy((gallery, options) => {
-    return utils.deleteGalleryImage(gallery.image)
+    if (gallery.image){
+      return utils.deleteImage('gallery/' + gallery.image)
+    }
   });
 
   Gallery.modelName = "Gallery"

@@ -1,5 +1,6 @@
 var { Gallery, Settlement } = require('../models')
 var { Response, ApiError } = require('../models/Response')
+var imageUtils = require('../utils/ImageUtils')
 
 function getGallery(req, res){
   var params = req.params
@@ -30,19 +31,22 @@ function deleteGallery(req, res){
   })
 }
 
-function postGallery(req, res){
+function prepareForSave(req, res, next){
   req.body.settlementId = req.params.id
   if(req.files){
-    var imageName = 'gallery-' + shortid.generate() + '.jpg'
+    var imageName = imageUtils.generateImageName('gallery')
     req.body.image = imageName
   }
+
+  next()
+}
+
+function postGallery(req, res){
 
   Gallery.create(req.body)
   .then( gallery => {
     if(req.files){
-      fileManager.save(req.files.image,
-                       req.body.image,
-                       path.join(__dirname, "../public/images/gallery"))
+      imageUtils.saveImage(req, 'gallery')
       .then(_ => {
         var response = Response.createOkResponse("Successful gallery creation", {gallery: gallery})
         res.status(201).send(response)
@@ -67,5 +71,7 @@ function postGallery(req, res){
 module.exports = {
   deleteGallery,
   postGallery,
-  getGallery
+  getGallery,
+
+  prepareForSave
 }

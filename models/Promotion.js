@@ -32,7 +32,9 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Promotion.afterDestroy((promotion, options) => {
-    return utils.deletePromotionImage(promotion.image)
+    if(promotion.image){
+      return utils.deleteImage('promotions/' + promotion.image)
+    }
   });
 
   Promotion.modelName = "Promotion"

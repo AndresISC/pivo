@@ -54,7 +54,9 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Settlement.afterDestroy((settlement, options) => {
-    return utils.deleteSettlementImage(settlement.image)
+    if (settlement.image){
+      return utils.deleteImage('settlements/' + settlement.image)
+    }
   });
 
   //Specify the relations of this model with other models

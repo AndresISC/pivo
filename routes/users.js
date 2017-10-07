@@ -6,8 +6,9 @@ var router = express.Router();
 
 //The next endpoints doesn't require any authentication yet
 router.get('/',User.getUsers);
-router.post('/', User.postUser)
+router.post('/', User.prepareForSave, User.postUser)
 router.delete('/:id', User.deleteUser)
+
 router.post('/login', User.login)
 
 

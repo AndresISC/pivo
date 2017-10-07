@@ -9,13 +9,13 @@ var router = express.Router();
 //router.use(auth.authenticate())
 
 router.get('/', Settlement.getSettlements)
-router.post('/', Settlement.postSettlement)
+router.post('/', Settlement.prepareForSave, Settlement.postSettlement)
 router.delete('/:id', Settlement.deleteSettlement)
 
 router.get('/:id/promotions', Promotion.getPromotions)
-router.post('/:id/promotions',  Promotion.postPromotion)
+router.post('/:id/promotions', Promotion.prepareForSave,  Promotion.postPromotion)
 
 router.get('/:id/gallery', Gallery.getGallery)
-router.post('/:id/photos',  Gallery.postGallery)
+router.post('/:id/photos', Gallery.prepareForSave,  Gallery.postGallery)
 
 module.exports = router;
