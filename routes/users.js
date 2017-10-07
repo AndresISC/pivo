@@ -1,15 +1,18 @@
 var express = require('express');
-var auth = require('../passport/auth.js')()
-var User = require('../controllers/User.js')
+var auth = require('../passport/auth')()
+var User = require('../controllers/User')
+var Favorites = require('../controllers/Favorites')
 var bodyParser = require('body-parser');
 var router = express.Router();
 
-//The next endpoints doesn't require any authentication yet
+//The next endpoints don't require any authentication yet
 router.get('/',User.getUsers);
 router.post('/', User.prepareForSave, User.postUser)
 router.delete('/:id', User.deleteUser)
 
 router.post('/login', User.login)
 
+router.get('/:id/favorites', Favorites.getFavorites)
+router.post('/:id/favorites', Favorites.postFavorite)
 
 module.exports = router;

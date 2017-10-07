@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const utils = require('../utils/ImageUtils.js')
 
 module.exports = (sequelize, DataTypes) => {
-  const UserType = sequelize.import('./UserType')
+  //const UserType = sequelize.import('./UserType')
 
   const User = sequelize.define('user', {
     firstName: {
@@ -73,7 +73,13 @@ module.exports = (sequelize, DataTypes) => {
     })
   })
 
-  User.belongsTo(UserType, { as: 'Type', foreignKey: 'user_type_id' })
+  User.associate = function(models) {
+      User.belongsTo(models.UserType, { as: 'Type', foreignKey: 'user_type_id' })
+      
+      User.belongsToMany(models.Settlement, { as: 'Visited', through: 'history', foreignKey: 'user_id' })
+      User.belongsToMany(models.Settlement, { as: 'CheckedIn', through: 'checked_in', foreignKey: 'user_id' })
+      User.belongsToMany(models.Settlement, { as: 'Favorites', through: 'favorites', foreignKey: 'user_id' })
+  }
 
   User.modelName = "User"
 

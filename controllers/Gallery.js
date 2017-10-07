@@ -32,7 +32,7 @@ function deleteGallery(req, res){
 }
 
 function prepareForSave(req, res, next){
-  req.body.settlementId = req.params.id
+  //req.body.settlementId = req.params.id
   if(req.files){
     var imageName = imageUtils.generateImageName('gallery')
     req.body.image = imageName
@@ -42,13 +42,17 @@ function prepareForSave(req, res, next){
 }
 
 function postGallery(req, res){
+  var settlement = Settlement.build(req.params)
+  var photo = Gallery.build(req.body)
 
-  Gallery.create(req.body)
-  .then( gallery => {
+  photo.setSettlement(settlement, {save:false})
+
+  photo.save()
+  .then( g => {
     if(req.files){
       imageUtils.saveImage(req, 'gallery')
       .then(_ => {
-        var response = Response.createOkResponse("Successful gallery creation", {gallery: gallery})
+        var response = Response.createOkResponse("Successful gallery creation", {gallery: g})
         res.status(201).send(response)
       })
       .catch(err => {
@@ -57,7 +61,7 @@ function postGallery(req, res){
         res.status(501).send(response)
       })
     }else{
-      var response = Response.createOkResponse("Successful gallery creation", {gallery: gallery})
+      var response = Response.createOkResponse("Successful gallery creation", {gallery: g})
       res.status(201).send(response)
     }
   })

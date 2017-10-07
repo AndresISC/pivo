@@ -66,7 +66,7 @@ function getBody(req){
   var lastRowId = req.query.lastRowId
   var lastRowValue =  req.query.lastRowValue
 
-  //Extra parameters used to display the data in a given way
+  //Extra parameters used to display the data in a determined way
   var orderBy = (typeof req.query.orderBy === 'undefined') ? 'created_at' : req.query.orderBy
   var sorting = (typeof req.query.sorting === 'undefined') ? 'DESC' : req.query.sorting
   var limit = (typeof req.query.limit === 'undefined') ? '15' : req.query.limit

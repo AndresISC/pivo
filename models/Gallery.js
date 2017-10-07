@@ -9,11 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     imagePath: {
       type: new DataTypes.VIRTUAL(DataTypes.String, ['image']),
       get: function() { return utils.generateURL(this.image) }
-    },
-    settlementId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'settlement_id'
     }
   },{
     underscored: true,
@@ -25,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       return utils.deleteImage('gallery/' + gallery.image)
     }
   });
+
+  Gallery.associate = function(models){
+    Gallery.belongsTo(models.Settlement, {as:'Settlement', foreignKey: 'settlement_id'})
+  }
 
   Gallery.modelName = "Gallery"
 

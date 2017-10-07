@@ -32,7 +32,6 @@ function getPromotions(req, res){
 }
 
 function prepareForSave(req, res, next){
-  req.body.settlementId = req.params.id
   if(req.files){
     var imageName = imageUtils.generateImageName('promotion')
     req.body.image = imageName
@@ -43,7 +42,12 @@ function prepareForSave(req, res, next){
 
 function postPromotion(req, res){
 
-  Promotion.create(req.body)
+  var settlement = Settlement.build(req.params)
+  var promotion = Promotion.build(req.body)
+
+  promotion.setSettlement(settlement, {save:false})
+
+  promotion.save()
   .then( promotion => {
     if(req.files){
       imageUtils.saveImage(req, 'promotions')

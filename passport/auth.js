@@ -10,7 +10,7 @@ const params = {
   secretOrKey: process.env.JWT_SECRET,
 
   //Specify where the token should be extracted from a request.
-  //In this specific case, it must be sent in the Authorization Header with the 'auth' word before it.
+  //In this specific case, it must be sent in the Authorization Header.
   //Example: auth xxxxxxxx.yyyyyyyy.zzzzzzzz
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('auth')
 }
@@ -18,7 +18,7 @@ const params = {
 module.exports = function(){
   //Strategy used to authenticate the user with the token he MUST provide in the Authorization header
   const strategy = new Strategy(params, function(payload, next){
-    //Check if the user id contained in the payload of the token exists in the database
+    //Check if the user id, contained in the payload of the token, exists in the database
     User.findById(payload.id)
       .then( user => {
         if (user){

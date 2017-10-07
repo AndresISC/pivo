@@ -20,11 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     imagePath: {
       type: new DataTypes.VIRTUAL(DataTypes.String, ['image']),
       get: function() { return utils.generateURL(this.image) }
-    },
-    settlementId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'settlement_id'
     }
   },{
     underscored: true,
@@ -36,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       return utils.deleteImage('promotions/' + promotion.image)
     }
   });
+
+  Promotion.associate = function(models){
+    Promotion.belongsTo(models.Settlement, {as:'Settlement', foreignKey: 'settlement_id'})
+  }
 
   Promotion.modelName = "Promotion"
 

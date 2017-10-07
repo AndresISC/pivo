@@ -23,10 +23,10 @@ fs
     return (file.indexOf(".") !== 0) &&
            (file !== "index.js") &&
            (file != "bootstrap.js") &&
-           (file != "Response.js");
+           (file != "Response.js")
   })
   .forEach(function(file) {
-    //Import the model of each file
+    //Create the model
     var model = sequelize.import(path.join(__dirname, file));
     var modelName = model.modelName
     //Extend every model with a 'seek' function to perform key-value pagination
@@ -36,9 +36,14 @@ fs
       return model.findAll(body)
     }
 
-
     //Store every model in the exported JSON
     db[modelName] = model;
+  });
+
+  Object.keys(db).forEach(function(modelName) {
+    if ("associate" in db[modelName]) {
+      db[modelName].associate(db);
+    }
   });
 
 //Store some other useful properties like the sequelize connection and the Sequelize module

@@ -4,7 +4,6 @@ var { Response, ApiError } = require('../models/Response')
 var imageUtils = require('../utils/ImageUtils')
 
 function login(req, res){
-  console.log(req.body);
   const body = req.body
   const email = body.email
   //Find a user with the submitted email
@@ -55,7 +54,6 @@ function prepareForSave(req, res, next){
   }
 
   next()
-
 }
 
 function postUser(req, res){

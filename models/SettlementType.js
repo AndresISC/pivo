@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'settlement_type',
   })
 
+  SettlementType.associate = function(models){
+    SettlementType.hasMany(models.Settlement, {as: 'Settlements', foreignKey: 'settlement_type_id'})
+  }
+
   SettlementType.modelName = "SettlementType"
 
   return SettlementType
