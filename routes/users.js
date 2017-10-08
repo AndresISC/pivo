@@ -13,6 +13,7 @@ router.delete('/:id', User.deleteUser)
 router.post('/login', User.login)
 
 router.get('/:id/favorites', Favorites.getFavorites)
-router.post('/:id/favorites', Favorites.postFavorite)
+router.post('/:userId/favorites/:settlementId', Favorites.postFavorite)
+router.delete('/:userId/favorites/:settlementId', Favorites.deleteFavorite)
 
 module.exports = router;

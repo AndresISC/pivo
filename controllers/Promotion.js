@@ -67,7 +67,7 @@ function postPromotion(req, res){
   })
   .catch( err => {
     console.log(err);
-    var response = Response.createErrorResponse("Validation failed", err)
+    var response = Response.createErrorResponse("Foreign Key failed", err)
     res.status(422).send(response)
   })
 }
