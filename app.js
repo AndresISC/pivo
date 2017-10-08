@@ -12,7 +12,6 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var settlementTypes = require('./routes/settlementTypes')
 var settlements = require('./routes/settlements')
 var promotions = require('./routes/promotions')
 var photos = require('./routes/gallery')
@@ -47,7 +46,6 @@ app.use(fileUpload());
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/settlementTypes', settlementTypes)
 app.use('/settlements', settlements)
 app.use('/promotions', promotions)
 app.use('/photos', photos)

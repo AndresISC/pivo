@@ -1,4 +1,4 @@
-var { Settlement } = require('../models')
+var { Settlement, SettlementCategory } = require('../models')
 var { Response, ApiError } = require('../models/Response')
 var imageUtils = require('../utils/ImageUtils')
 
@@ -24,7 +24,13 @@ function prepareForSave(req, res, next){
 
 function postSettlement(req, res){
 
-  Settlement.create(req.body)
+  var settlement = Settlement.build(req.body)
+  if (req.body.categoryId){
+    var category = SettlementCategory.build({ id: req.body.categoryId })
+    settlement.setCategory(category, {save:false})
+  }
+
+  settlement.save()
   .then( settlement => {
     if(req.files){
       imageUtils.saveImage(req, 'settlements')

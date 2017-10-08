@@ -3,8 +3,8 @@ var { Response, ApiError } = require('../models/Response')
 
 function postFavorite(req, res){
   var user = User.build({ id: req.params.userId })
-  var settlement = Settlement.build({ id: req.params.settlementId })
-  user.addFavorite(settlement)
+
+  user.addFavorite(req.params.settlementId)
   .then(favorite => {
     var response = Response.createOkResponse("Successful favorite creation", {favorite: favorite})
     res.status(201).send(response)
@@ -17,8 +17,8 @@ function postFavorite(req, res){
 
 function deleteFavorite(req,res){
   var user = User.build({ id: req.params.userId })
-  var settlement = Settlement.build({ id: req.params.settlementId })
-  user.removeFavorite(settlement)
+  
+  user.removeFavorite(req.params.settlementId)
   .then(deleted => {
     var response = Response.createOkResponse("Successfully deleted", {deleted: deleted})
     res.status(201).send(response)

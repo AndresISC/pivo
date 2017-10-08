@@ -1,10 +1,6 @@
 var utils = require('../utils/ImageUtils.js')
 
 module.exports = (sequelize, DataTypes) => {
-  //const SettlementType = sequelize.import('./SettlementType')
-  //const Promotion = sequelize.import('./Promotion')
-  //const Gallery = sequelize.import('./Gallery')
-  //const User = sequelize.import('./User')
 
   var Settlement = sequelize.define('settlement', {
     name: {
@@ -60,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Settlement.associate = function(models) {
-    Settlement.belongsTo(models.SettlementType, { as: 'Type', foreignKey: 'settlement_type_id' })
+    Settlement.belongsTo(models.SettlementCategory, { as: 'Category', foreignKey: 'settlement_category_id' })
 
     Settlement.hasMany(models.Promotion, {as:'Promotions', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true })
     Settlement.hasMany(models.Gallery, {as:'Photos', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true})
