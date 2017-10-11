@@ -18,6 +18,13 @@ module.exports = {
     return prefix + '-' + shortid.generate() + '.jpg'
   },
 
+  saveImageObj: function(image, imageName, directory){
+    var imagePath = path.join(__dirname, "../" + imagesDirectory + directory),
+        fullPath = path.join(imagePath, imageName)
+
+        return image.mv(fullPath)
+  },
+
   saveImage: function(req, directory, field = 'image'){
     var image = req.files.image,
         imageName = req.body[field],

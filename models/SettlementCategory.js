@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmpty: true
+        notEmpty: true
       }
     },
     image: { type: DataTypes.STRING },
@@ -19,8 +19,21 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'settlement_category',
   })
 
+  SettlementCategory.beforeSave((category, options) => {
+    if(options.files){
+      var imageName = utils.generateImageName('category')
+      category.image = imageName
+    }
+  })
+
+  SettlementCategory.afterSave((category, options) => {
+    if (category.changed("image") && options.files){
+      return utils.saveImageObj(options.files.image, category.image, 'categories')
+    }
+  })
+
   SettlementCategory.afterDestroy((category, options) => {
-    if (category.avatar){
+    if (category.image){
       return utils.deleteImage('categories/' + category.image)
     }
   });

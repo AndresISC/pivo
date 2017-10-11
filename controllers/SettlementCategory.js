@@ -14,8 +14,7 @@ function getCategories(req, res){
 }
 
 function deleteCategory(req, res){
-  var params = req.params
-  SettlementCategory.destroy({ where: params, individualHooks: true })
+  SettlementCategory.destroy({ where: req.params, individualHooks: true })
   .then(rowsDeleted => {
     var response = Response.createOkResponse("Successful deleted", {deleted: rowsDeleted})
     res.status(201).send(response)
@@ -27,7 +26,14 @@ function deleteCategory(req, res){
 }
 
 function postCategory(req, res){
-
+  SettlementCategory.create(req.body, {files: req.files})
+  .then(category => {
+    res.send(category)
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err)
+  })
 }
 
 module.exports = {
