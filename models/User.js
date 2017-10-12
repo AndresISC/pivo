@@ -48,6 +48,22 @@ module.exports = (sequelize, DataTypes) => {
     return bcrypt.compare(password, this.password)
   }
 
+  User.beforeSave((user, options) => {
+    if(options.files){
+      var imageName = utils.generateImageName('user')
+      user.avatar = imageName
+    }
+  })
+
+  User.afterSave((user, options) => {
+    if (user.changed("avatar") && options.files){
+      if (user.previous("avatar")){
+        utils.deleteImage('users/' + user.previous("avatar"))
+      }
+      return utils.saveImageObj(options.files.image, user.avatar, 'users')
+    }
+  })
+
   User.afterDestroy((user, options) => {
     if (user.avatar){
       return utils.deleteImage('users/' + user.avatar)

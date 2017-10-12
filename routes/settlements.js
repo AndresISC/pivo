@@ -10,17 +10,20 @@ var router = express.Router();
 //router.use(auth.authenticate())
 
 router.get('/', Settlement.getSettlements)
-router.post('/', Settlement.prepareForSave, Settlement.postSettlement)
+router.post('/', Settlement.postSettlement)
 router.delete('/:id', Settlement.deleteSettlement)
+router.put('/:id', Settlement.putSettlement)
 
 router.get('/:id/promotions', Promotion.getPromotions)
-router.post('/:id/promotions', Promotion.prepareForSave,  Promotion.postPromotion)
+router.post('/:id/promotions', Promotion.postPromotion)
 
 router.get('/:id/gallery', Gallery.getGallery)
-router.post('/:id/photos', Gallery.prepareForSave,  Gallery.postGallery)
+router.post('/:id/photos', Gallery.postGallery)
+
 
 router.get('/categories', SettlementCategory.getCategories)
 router.post('/categories', SettlementCategory.postCategory)
 router.delete('/categories/:id', SettlementCategory.deleteCategory)
+router.put('/categories/:id', SettlementCategory.putCategory)
 
 module.exports = router;

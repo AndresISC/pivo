@@ -26,6 +26,22 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'promotion',
   })
 
+  Promotion.beforeSave((promotion, options) => {
+    if(options.files){
+      var imageName = utils.generateImageName('promotion')
+      promotion.image = imageName
+    }
+  })
+
+  Promotion.afterSave((promotion, options) => {
+    if (promotion.changed("image") && options.files){
+      if (promotion.previous("image")){
+        utils.deleteImage('promotions/' + promotion.previous("image"))
+      }
+      return utils.saveImageObj(options.files.image, promotion.image, 'promotions')
+    }
+  })
+
   Promotion.afterDestroy((promotion, options) => {
     if(promotion.image){
       return utils.deleteImage('promotions/' + promotion.image)
@@ -33,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Promotion.associate = function(models){
-    Promotion.belongsTo(models.Settlement, {as:'Settlement', foreignKey: 'settlement_id'})
+    Promotion.belongsTo(models.Settlement, {as:'Settlement', foreignKey: {name: 'settlementId', field:'settlement_id', allowNull: false}})
   }
 
   Promotion.modelName = "Promotion"

@@ -17,7 +17,7 @@ function postFavorite(req, res){
 
 function deleteFavorite(req,res){
   var user = User.build({ id: req.params.userId })
-  
+
   user.removeFavorite(req.params.settlementId)
   .then(deleted => {
     var response = Response.createOkResponse("Successfully deleted", {deleted: deleted})

@@ -25,6 +25,20 @@ function deleteCategory(req, res){
   })
 }
 
+function putCategory(req, res){
+  var category = SettlementCategory.findById(req.params.id)
+  .then(category => {
+    return category.update(req.body, {files: req.files})
+  })
+  .then(c => {
+    res.send(c)
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err)
+  })
+}
+
 function postCategory(req, res){
   SettlementCategory.create(req.body, {files: req.files})
   .then(category => {
@@ -39,6 +53,6 @@ function postCategory(req, res){
 module.exports = {
   getCategories,
   postCategory,
-  deleteCategory
-
+  deleteCategory,
+  putCategory
 }

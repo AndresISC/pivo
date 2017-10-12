@@ -31,39 +31,16 @@ function getPromotions(req, res){
   })
 }
 
-function prepareForSave(req, res, next){
-  if(req.files){
-    var imageName = imageUtils.generateImageName('promotion')
-    req.body.image = imageName
-  }
-
-  next()
-}
-
 function postPromotion(req, res){
 
   var settlement = Settlement.build(req.params)
   var promotion = Promotion.build(req.body)
 
   promotion.setSettlement(settlement, {save:false})
-
-  promotion.save()
-  .then( promotion => {
-    if(req.files){
-      imageUtils.saveImage(req, 'promotions')
-      .then(_ => {
-        var response = Response.createOkResponse("Successful promotion creation", {promotion: promotion})
-        res.status(201).send(response)
-      })
-      .catch(err => {
-        console.log(err);
-        var response = Response.createServerErrorResponse()
-        res.status(501).send(response)
-      })
-    }else{
-      var response = Response.createOkResponse("Successful promotion creation", {promotion: promotion})
-      res.status(201).send(response)
-    }
+  promotion.save({files: req.files})
+  .then(promotion => {
+    var response = Response.createOkResponse("Successful promotion creation", {promotion: promotion})
+    res.status(201).send(response)
   })
   .catch( err => {
     console.log(err);
@@ -72,10 +49,23 @@ function postPromotion(req, res){
   })
 }
 
+function putPromotion(req, res){
+  var promotion = Promotion.findById(req.params.id)
+  .then(promotion => {
+    return promotion.update(req.body, {files: req.files})
+  })
+  .then(c => {
+    res.send(c)
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err)
+  })
+}
+
 module.exports = {
   deletePromotion,
   postPromotion,
   getPromotions,
-
-  prepareForSave
+  putPromotion
 }

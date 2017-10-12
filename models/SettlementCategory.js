@@ -28,18 +28,21 @@ module.exports = (sequelize, DataTypes) => {
 
   SettlementCategory.afterSave((category, options) => {
     if (category.changed("image") && options.files){
+      if (category.previous("image")){
+        utils.deleteImage('categories/' + category.previous("image"))
+      }
       return utils.saveImageObj(options.files.image, category.image, 'categories')
     }
   })
 
   SettlementCategory.afterDestroy((category, options) => {
     if (category.image){
-      return utils.deleteImage('categories/' + category.image)
+      utils.deleteImage('categories/' + category.image)
     }
   });
 
   SettlementCategory.associate = function(models){
-    SettlementCategory.hasMany(models.Settlement, {as: 'Settlements', foreignKey: 'settlement_category_id'})
+    SettlementCategory.hasMany(models.Settlement, {as: 'Settlements', foreignKey: {name: 'categoryId', field:'category_id'}})
   }
 
   SettlementCategory.modelName = "SettlementCategory"

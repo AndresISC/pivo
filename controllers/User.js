@@ -46,40 +46,31 @@ function login(req, res){
   })
 }
 
-function prepareForSave(req, res, next){
-  //If the request contains an avatar image file, then generate a random unique name for it
-  if(req.files){
-    var imageName = imageUtils.generateImageName('user')
-    req.body.avatar = imageName
-  }
-
-  next()
-}
-
 function postUser(req, res){
   //Store the new user in the database
-  User.create(req.body)
+  User.create(req.body, {files: req.files})
   .then( user => {
-    //If the request contains an avatar image file, then save it in the public/images/users folder
-    if(req.files){
-      imageUtils.saveImage(req, 'users', 'avatar')
-      .then(_ => {
-        var response = Response.createOkResponse("Successful user creation", {user: user})
-        res.status(201).send(response)
-      })
-      .catch(err => {
-        var response = Response.createServerErrorResponse()
-        res.status(501).send(response)
-      })
-    }else{
-      var response = Response.createOkResponse("Successful user creation", {user: user})
-      res.status(201).send(response)
-    }
+    var response = Response.createOkResponse("Successful user creation", {user: user})
+    res.status(201).send(response)
   })
   .catch( err => {
     console.log(err);
     var response = Response.createErrorResponse("Validation failed", err)
     res.status(422).send(response)
+  })
+}
+
+function putUser(req, res){
+  var user = User.findById(req.params.id)
+  .then(user => {
+    return user.update(req.body, {files: req.files})
+  })
+  .then(c => {
+    res.send(c)
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err)
   })
 }
 
@@ -111,7 +102,6 @@ module.exports = {
   postUser,
   deleteUser,
   getUsers,
-  login,
-
-  prepareForSave
+  putUser,
+  login
 }

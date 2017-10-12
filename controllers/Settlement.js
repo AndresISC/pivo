@@ -13,15 +13,6 @@ function getSettlements(req, res){
   })
 }
 
-function prepareForSave(req, res, next){
-  if(req.files){
-    var imageName = imageUtils.generateImageName('settlement')
-    req.body.image = imageName
-  }
-
-  next()
-}
-
 function postSettlement(req, res){
 
   var settlement = Settlement.build(req.body)
@@ -30,28 +21,29 @@ function postSettlement(req, res){
     settlement.setCategory(category, {save:false})
   }
 
-  settlement.save()
+  settlement.save({files: req.files})
   .then( settlement => {
-    if(req.files){
-      imageUtils.saveImage(req, 'settlements')
-      .then(_ => {
-        var response = Response.createOkResponse("Successful settlement creation", {settlement: settlement})
-        res.status(201).send(response)
-      })
-      .catch(err => {
-        console.log(err);
-        var response = Response.createServerErrorResponse()
-        res.status(501).send(response)
-      })
-    }else{
-      var response = Response.createOkResponse("Successful settlement creation", {settlement: settlement})
-      res.status(201).send(response)
-    }
+    var response = Response.createOkResponse("Successful settlement creation", {settlement: settlement})
+    res.status(201).send(response)
   })
   .catch( err => {
     console.log(err);
     var response = Response.createErrorResponse("Validation failed", err)
     res.status(422).send(response)
+  })
+}
+
+function putSettlement(req, res){
+  var settlement = Settlement.findById(req.params.id)
+  .then(settlement => {
+    return settlement.update(req.body, {files: req.files})
+  })
+  .then(c => {
+    res.send(c)
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err)
   })
 }
 
@@ -86,6 +78,5 @@ module.exports = {
   getSettlements,
   postSettlement,
   deleteSettlement,
-
-  prepareForSave
+  putSettlement
 }

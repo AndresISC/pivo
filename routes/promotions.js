@@ -7,6 +7,7 @@ var router = express.Router();
 //router.use(auth.authenticate())
 
 router.delete('/:id',  Promotion.deletePromotion);
+router.put('/:id/', Promotion.putPromotion)
 
 
 module.exports = router;

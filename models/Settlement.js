@@ -49,6 +49,22 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'settlement',
   })
 
+  Settlement.beforeSave((settlement, options) => {
+    if(options.files){
+      var imageName = utils.generateImageName('settlement')
+      settlement.image = imageName
+    }
+  })
+
+  Settlement.afterSave((settlement, options) => {
+    if (settlement.changed("image") && options.files){
+      if (settlement.previous("image")){
+        utils.deleteImage('settlements/' + settlement.previous("image"))
+      }
+      return utils.saveImageObj(options.files.image, settlement.image, 'settlements')
+    }
+  })
+
   Settlement.afterDestroy((settlement, options) => {
     if (settlement.image){
       return utils.deleteImage('settlements/' + settlement.image)
@@ -56,10 +72,16 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Settlement.associate = function(models) {
-    Settlement.belongsTo(models.SettlementCategory, { as: 'Category', foreignKey: 'settlement_category_id' })
-
-    Settlement.hasMany(models.Promotion, {as:'Promotions', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true })
-    Settlement.hasMany(models.Gallery, {as:'Photos', foreignKey: { field:'settlement_id', allowNull: false }, onDelete: 'cascade', hooks: true})
+    Settlement.belongsTo(models.SettlementCategory, { as: 'Category', foreignKey: {name: 'categoryId', field:'category_id'}})
+    Settlement.hasMany(models.Promotion, {as:'Promotions',
+                                          foreignKey: {
+                                                        name: 'settlementId',
+                                                        field:'settlement_id',
+                                                        allowNull: false
+                                                      },
+                                          onDelete: 'cascade',
+                                          hooks: true })
+    Settlement.hasMany(models.Gallery, {as:'Photos', foreignKey: {name: 'settlementId', field:'settlement_id', allowNull: false}, onDelete: 'cascade', hooks: true})
 
     Settlement.belongsToMany(models.User, { as: 'FavoritedBy', through: 'favorites', foreignKey: 'settlement_id' })
     Settlement.belongsToMany(models.User, { as: 'Vistors', through: 'history', foreignKey: 'settlement_id' })

@@ -31,44 +31,36 @@ function deleteGallery(req, res){
   })
 }
 
-function prepareForSave(req, res, next){
-  //req.body.settlementId = req.params.id
-  if(req.files){
-    var imageName = imageUtils.generateImageName('gallery')
-    req.body.image = imageName
-  }
-
-  next()
-}
-
 function postGallery(req, res){
   var settlement = Settlement.build(req.params)
   var photo = Gallery.build(req.body)
 
   photo.setSettlement(settlement, {save:false})
 
-  photo.save()
+  photo.save({files: req.files})
   .then( g => {
-    if(req.files){
-      imageUtils.saveImage(req, 'gallery')
-      .then(_ => {
-        var response = Response.createOkResponse("Successful gallery creation", {gallery: g})
-        res.status(201).send(response)
-      })
-      .catch(err => {
-        console.log(err);
-        var response = Response.createServerErrorResponse()
-        res.status(501).send(response)
-      })
-    }else{
-      var response = Response.createOkResponse("Successful gallery creation", {gallery: g})
-      res.status(201).send(response)
-    }
+    var response = Response.createOkResponse("Successful gallery creation", {gallery: g})
+    res.status(201).send(response)
   })
   .catch( err => {
     console.log(err);
+
     var response = Response.createErrorResponse("Foreign Key failed", err)
     res.status(422).send(response)
+  })
+}
+
+function putGallery(req, res){
+  var gallery = Gallery.findById(req.params.id)
+  .then(gallery => {
+    return gallery.update(req.body, {files: req.files})
+  })
+  .then(c => {
+    res.send(c)
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err)
   })
 }
 
@@ -76,6 +68,5 @@ module.exports = {
   deleteGallery,
   postGallery,
   getGallery,
-
-  prepareForSave
+  putGallery
 }
