@@ -22,7 +22,7 @@ var app = express();
 
 //Check if the database is already created and sync it. If it doesn't exist, then create it.
 //CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
-bootstrap.load({force: true})
+bootstrap.load({force: false})
 
 
 // view engine setup
@@ -41,6 +41,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'public/images/users')));
 app.use(express.static(path.join(__dirname, 'public/images/settlements')));
+app.use(express.static(path.join(__dirname, 'public/images/categories')));
+app.use(express.static(path.join(__dirname, 'public/images/gallery')));
+app.use(express.static(path.join(__dirname, 'public/images/promotions')));
 app.use(express.static('views'));
 app.use(fileUpload());
 

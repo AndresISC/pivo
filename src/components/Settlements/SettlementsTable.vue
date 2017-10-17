@@ -46,9 +46,9 @@
 </template>
 
 <script>
-  import service from '../api/Settlement'
-  import pagination from '../utils/Pagination'
-  import { PaginatedDataTable } from '../mixins/PaginatedDataTable'
+  import service from '../../api/Settlement'
+  import pagination from '../../utils/Pagination'
+  import { PaginatedDataTable } from '../../mixins/PaginatedDataTable'
 
   export default {
     mixins: [PaginatedDataTable],

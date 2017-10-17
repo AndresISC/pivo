@@ -7,7 +7,7 @@ let routes = [
   },
   {
     path: '/settlements',
-    component: require('./components/SettlementsTable.vue').default
+    component: require('./components/Settlements/Settlements.vue').default
   },
   {
     name: 'home',
