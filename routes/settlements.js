@@ -17,7 +17,7 @@ router.put('/:id', Settlement.putSettlement)
 router.get('/:id/promotions', Promotion.getPromotions)
 router.post('/:id/promotions', Promotion.postPromotion)
 
-router.get('/:id/gallery', Gallery.getGallery)
+router.get('/:id/photos', Gallery.getGallery)
 router.post('/:id/photos', Gallery.postGallery)
 
 

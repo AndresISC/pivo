@@ -8,7 +8,7 @@ function getSettlements(params){
 }
 
 function getGallery(settlementId){
-  var request = axios.get('http://localhost/settlements/'+settlementId+'/gallery')
+  var request = axios.get('http://localhost/settlements/'+settlementId+'/photos')
   return request
 }
 
@@ -17,8 +17,23 @@ function getPromotions(settlementId){
   return request
 }
 
+function deletePhoto(photoId){
+  var request = axios.delete('http://localhost/photos/'+photoId)
+  return request
+}
+
+function postPhoto(settlementId, photo){
+  var formData = new FormData();
+  formData.append("image", photo);
+  var request = axios.post('http://localhost/settlements/'+settlementId+'/photos', formData)
+  return request
+}
+
+
 export default{
   getSettlements,
   getGallery,
-  getPromotions
+  getPromotions,
+  deletePhoto,
+  postPhoto
 }

@@ -1,8 +1,8 @@
 <template lang="html">
   <div class="photo-container grey darken-4">
-    <img class="image" :src="photo.imagePath" width="100%" height="100%">
+    <img class="image" :src="photo.imagePath"  >
     <div class="middle">
-      <v-btn class="white" icon>
+      <v-btn class="white" @click.stop="deletePhoto" icon>
         <v-icon>delete</v-icon>
       </v-btn>
     </div>
@@ -10,8 +10,24 @@
 </template>
 
 <script>
+import api from '../../../api/Settlement'
 export default {
-  props:['photo']
+  props:['photo','i'],
+  methods:{
+    deletePhoto(){
+      api.deletePhoto(this.photo.id)
+      .then(result => {
+        var payload = {
+          photo: this.photo,
+          index: this.i
+        }
+        this.$emit('onPhotoDeleted', payload)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+  }
 }
 </script>
 
@@ -27,6 +43,8 @@ export default {
   display: block;
   transition: .5s ease;
   backface-visibility: hidden;
+  width: 100%;
+  height: 170px;
 }
 
 .middle {
