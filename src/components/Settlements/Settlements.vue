@@ -3,14 +3,16 @@
     <app-table ></app-table>
 
     <v-navigation-drawer
+      v-if="selectedSettlement"
       right
       temporary
       v-model="right"
       absolute
       v-bind:class="{ open: right }"
     >
-    <app-gallery :settlementId="settlementId()"></app-gallery>
-    <!--<app-promotions :settlementId="settlementId()"></app-promotions>-->
+    <!--<app-gallery :settlementId="settlementId()"></app-gallery>-->
+    <!--<app-promotions :settlementId="selectedSettlement.id"></app-promotions>-->
+    <app-settlement :settlement="{name: null, description: null, image: null, email: null, phone: null, facebookUrl: null, url: null, latitude: null, longitude: null}"></app-settlement>
 
     </v-navigation-drawer>
   </div>
@@ -21,7 +23,7 @@ import table from './SettlementsTable.vue'
 import profile from './SettlementProfile.vue'
 import gallery from './Gallery/SettlementGallery.vue'
 import promotions from './Promotions/SettlementPromotions.vue'
-
+import settlement from './SettlementProfile.vue'
   export default {
     data () {
       return {
@@ -33,16 +35,8 @@ import promotions from './Promotions/SettlementPromotions.vue'
       'app-table': table,
       'app-profile': profile,
       'app-gallery': gallery,
-      'app-promotions': promotions
-    },
-    methods:{
-      settlementId(){
-        if(this.selectedSettlement){
-          return this.selectedSettlement.id
-        }else{
-          return null
-        }
-      }
+      'app-promotions': promotions,
+      'app-settlement': settlement
     },
     mounted(){
       bus.listen('onSettlementSelected', settlement => {

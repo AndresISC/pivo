@@ -13,14 +13,12 @@
         </v-layout>
       </v-container>
     </v-card-media>
-    <v-card-title>
-      <div>
-        <span>Del <b>{{ promotion.startDate | formatDate }}</b> al <b>{{ promotion.endDate | formatDate }}</b></span>
-      </div>
-    </v-card-title>
+    <v-card-text class="pt-2 pb-1">
+      <span>Del <b>{{ promotion.startDate | formatDate }}</b> al <b>{{ promotion.endDate | formatDate }}</b></span>
+    </v-card-text>
     <v-card-actions class="white">
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon @click.stop="deletePromotion">
         <v-icon>delete</v-icon>
       </v-btn>
       <v-btn icon>
@@ -32,12 +30,29 @@
 
 <script>
 import moment from 'moment'
+import api from '../../../api/Settlement'
 export default {
-  props: ['promotion'],
+  props: ['promotion','i'],
   filters:{
     formatDate(date){
       var currentDate = moment(date).format('DD/MM/YYYY')
       return currentDate
+    }
+  },
+
+  methods:{
+    deletePromotion(){
+      api.deletePromotion(this.promotion.id)
+      .then(response => {
+        var payload = {
+          promotion: this.promotion,
+          index: this.i
+        }
+        this.$emit('onPromotionDeleted', payload)
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }
   }
 }

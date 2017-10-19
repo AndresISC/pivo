@@ -28,15 +28,15 @@
         class="elevation-1"
       >
         <template slot="items" scope="props">
-          <td  class="text-xs-center"><img class="avatar" :src="props.item.imagePath"/></td>
+          <td  class="text-xs-center image-col"><img class="avatar" :src="props.item.imagePath"/></td>
           <td  class="text-xs-right body-2">{{ props.item.name }}</td>
           <td  class="text-xs-right body-2">{{ props.item.email }}</td>
           <td  class="text-xs-right body-2">{{ props.item.phone }}</td>
-          <td  class="text-xs-right body-2"><a :href="props.item.url">{{ props.item.url }}</a></td>
-          <td  class="text-xs-right body-2"> <a :href="props.item.facebookUrl">{{ props.item.facebookUrl }}</a></td>
+          <td  class="text-xs-right body-2"><a v-if="props.item.url" :href="props.item.url">{{ props.item.name }}</a></td>
+          <td  class="text-xs-right body-2"><a v-if="props.item.facebookUrl" :href="props.item.facebookUrl">{{ props.item.name }}</a></td>
           <td  class="text-xs-right body-2">
             <v-btn icon class="pink--text" @click.stop="selectSettlement(props.item)">
-              <v-icon>favorite</v-icon>
+              <v-icon>info</v-icon>
             </v-btn>
           </td>
         </template>
@@ -115,13 +115,11 @@
 <style>
 
   .avatar{
-    width: 42px;
-    height: 42px;
+    width: 65px;
+    height: 65px;
   }
 
-
-
-  tr{
-    height: 65px !important;
+  .image-col{
+    height: 75px !important;
   }
 </style>

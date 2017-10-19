@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
   var Settlement = sequelize.define('settlement', {
     name: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.TEXT,
+      allowNull: false,
+      validate:{
+        notEmpty: true
+      }
     },
     email:{
       type: DataTypes.STRING,
@@ -19,6 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
+    phone: {
+      type: DataTypes.STRING,
+    },
+    description: {
+      type: DataTypes.TEXT,
+    },
     url: {
       type: DataTypes.STRING,
       validate: { isUrl: true }
@@ -28,9 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'facebook_url',
       validate: { isUrl: true }
     },
-    phone: {
-      type: DataTypes.STRING,
-    },
+
     latitude: {
       type: DataTypes.DECIMAL
     },

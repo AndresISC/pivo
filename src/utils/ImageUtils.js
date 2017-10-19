@@ -4,6 +4,11 @@ module.exports = {
     reader.onload = function(e){
       next(e.target.result)
     }
-    reader.readAsDataURL(target.files[0]);
+    if(target.files.length > 0){
+      reader.readAsDataURL(target.files[0]);
+    }else{
+      next(null)
+    }
+
   }
 }

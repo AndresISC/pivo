@@ -26,10 +26,10 @@
         :total-items="totalItems"
         :loading="loading"
         :rows-per-page-text="rowsPerPageText"
-        class="elevation-1"
+        class="elevation-1 "
       >
-        <template slot="items" scope="props">
-          <td  class="text-xs-center"><img class="avatar" :src="props.item.avatarPath"/></td>
+        <template  slot="items" scope="props">
+          <td  class="text-xs-center image-col"><img class="avatar" :src="props.item.avatarPath"/></td>
           <td  class="text-xs-right">{{ props.item.firstName }}</td>
           <td  class="text-xs-right">{{ props.item.lastName }}</td>
           <td  class="text-xs-right">{{ props.item.email }}</td>
@@ -100,7 +100,7 @@ email
     height: 65px;
   }
 
-  tr{
-    height: 70px !important;
+  .image-col {
+    height: 75px !important;
   }
 </style>
