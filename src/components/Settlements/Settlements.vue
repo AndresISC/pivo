@@ -12,7 +12,7 @@
     >
     <!--<app-gallery :settlementId="settlementId()"></app-gallery>-->
     <!--<app-promotions :settlementId="selectedSettlement.id"></app-promotions>-->
-    <app-settlement :settlement="{name: null, description: null, image: null, email: null, phone: null, facebookUrl: null, url: null, latitude: null, longitude: null}"></app-settlement>
+    <app-settlement :settlement="{name: null, description: null, image: null, email: null, phone: null, facebookUrl: null, url: null, latitude: null, longitude: null, categoryId: null}"></app-settlement>
 
     </v-navigation-drawer>
   </div>

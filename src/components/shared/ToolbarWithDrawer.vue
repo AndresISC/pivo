@@ -63,7 +63,8 @@ export default {
       items: [
           { title: 'Inicio', icon: 'home', link:"/home" },
           { title: 'Usuarios', icon: 'account_box', link:"/users" },
-          { title: 'Negocios', icon: 'account_box', link:"/settlements" }
+          { title: 'Negocios', icon: 'business', link:"/settlements" },
+          { title: 'Categorías', icon: 'account_box', link:"/categories" }
         ]
     }
   }

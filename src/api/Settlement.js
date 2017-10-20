@@ -38,7 +38,9 @@ function postPromotion(settlementId, promotion) {
   var formData = new FormData();
 
   for ( var key in promotion ) {
-    formData.append(key, promotion[key]);
+    if (promotion[key]){
+      formData.append(key, promotion[key]);
+    }
   }
   var request = axios.post('http://localhost/settlements/'+settlementId+'/promotions', formData)
   return request
@@ -46,7 +48,6 @@ function postPromotion(settlementId, promotion) {
 
 function postSettlement(settlement){
   var formData = new FormData();
-  console.log(settlement);
   for ( var key in settlement ) {
     if(settlement[key]){
       formData.append(key, settlement[key])
@@ -54,6 +55,28 @@ function postSettlement(settlement){
   }
 
   var request = axios.post('http://localhost/settlements/', formData)
+  return request
+}
+
+function getCategories(){
+  var request = axios.get('http://localhost/settlements/categories')
+  return request
+}
+
+function deleteCategory(categoryId){
+  var request = axios.delete('http://localhost/settlements/categories/' + categoryId)
+  return request
+}
+
+function postCategory(category){
+  var formData = new FormData();
+  for ( var key in category ) {
+    if(category[key]){
+      formData.append(key, category[key])
+    }
+  }
+
+  var request = axios.post('http://localhost/settlements/categories/', formData)
   return request
 }
 
@@ -65,5 +88,8 @@ export default{
   postPhoto,
   deletePromotion,
   postPromotion,
-  postSettlement
+  postSettlement,
+  getCategories,
+  deleteCategory,
+  postCategory
 }

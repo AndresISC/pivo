@@ -10,6 +10,11 @@ let routes = [
     component: require('./components/Settlements/Settlements.vue').default
   },
   {
+    name: 'categories',
+    path: '/categories',
+    component: require('./components/Settlements/Categories/Categories.vue').default
+  },
+  {
     name: 'home',
     path: '/home/:token',
     component: require('./components/UsersTable.vue').default

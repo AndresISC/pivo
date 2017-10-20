@@ -27,7 +27,7 @@
         :rows-per-page-text="rowsPerPageText"
         class="elevation-1"
       >
-        <template slot="items" scope="props">
+        <template slot="items" slot-scope="props">
           <td  class="text-xs-center image-col"><img class="avatar" :src="props.item.imagePath"/></td>
           <td  class="text-xs-right body-2">{{ props.item.name }}</td>
           <td  class="text-xs-right body-2">{{ props.item.email }}</td>

@@ -18,6 +18,30 @@
         ></v-text-field>
       </v-flex>
 
+      <v-flex xs12>
+        <v-select
+          :items="categories"
+          v-model="mutableSettlement.categoryId"
+          label="Categoría"
+          single-line
+          auto
+          prepend-icon="map"
+          item-text="name"
+          item-value="id"
+        >
+          <template slot="item" slot-scope="data">
+            <template>
+              <v-list-tile-avatar>
+                <img :src="data.item.imagePath"/>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+              </v-list-tile-content>
+            </template>
+          </template>
+        </v-select>
+      </v-flex>
+
       <v-flex xs12 >
         <v-text-field
           name="email"
@@ -113,18 +137,29 @@ import api from '../../api/Settlement'
 export default {
   props:['settlement'],
   data(){
-
     return{
       valid: false,
       image: null,
-      mutableSettlement: this.settlement
+      mutableSettlement: this.settlement,
+      categories: [],
     }
   },
+  mounted(){
+    this.getCategories()
+  },
   methods:{
+    getCategories(){
+      api.getCategories()
+      .then(res => {
+        this.categories = res.data.payload.categories
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
     click(){
       this.$refs.imageInput.click()
     },
-
     onPhotoUploaded(e){
       if(e.target.files.length > 0){
         this.mutableSettlement.image = this.$refs.imageInput.files[0]
