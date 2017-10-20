@@ -36,7 +36,7 @@
 
 <script>
 import datePicker from '../../shared/DatePicker.vue'
-import imagePicker from '../../shared/imagePicker.vue'
+import imagePicker from '../../shared/ImagePicker.vue'
 import imageUtils from '../../../utils/ImageUtils'
 import api from '../../../api/Settlement'
 

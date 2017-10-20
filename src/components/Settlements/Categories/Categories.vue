@@ -3,16 +3,12 @@
     <app-categories-list @onNewCategory="right=true">
     </app-categories-list>
 
-    <v-navigation-drawer
-      right
-      temporary
-      v-model="right"
-      absolute
-      v-bind:class="{ open: right }"
-    >
-    <app-category :category="{image: null, name: null}"></app-category>
+    <v-dialog v-model="right" persistent max-width="500px">
 
-    </v-navigation-drawer>
+      <app-category @onCanceled="right=false" :category="{image: null, name: null}">
+      </app-category>
+
+    </v-dialog>
   </div>
 </template>
 
@@ -31,9 +27,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-.open{
-  width: 500px;
-}
-</style>

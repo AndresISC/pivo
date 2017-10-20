@@ -1,7 +1,6 @@
 <template lang="html">
 
   <v-container fluid grid-list-sm class="mt-4">
-
     <v-layout row wrap>
       <v-flex d-flex xs8 offset-xs2>
         <v-card>
@@ -31,12 +30,9 @@
             </v-layout>
             <p v-else class="text-xs-center ma-0">No hay categorías registradas</p>
           </v-card-text>
-
         </v-card>
       </v-flex>
-
     </v-layout>
-
   </v-container>
 
 </template>
@@ -75,6 +71,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-</style>

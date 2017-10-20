@@ -1,24 +1,28 @@
 <template lang="html">
-  <div class="pa-4">
 
-    <v-form v-model="valid" ref="form" width="100%">
-      <app-image-picker v-model="mutableCategory.image"></app-image-picker>
+    <v-card>
+      <v-card-title>
+        <span class="headline"> {{ title }} </span>
+      </v-card-title>
+      <v-card-text>
+        <v-form v-model="valid" ref="form" width="100%">
+          <app-image-picker v-model="mutableCategory.image"></app-image-picker>
 
-      <v-text-field
-        name="name"
-        v-model="mutableCategory.name"
-        label="Nombre"
-        single-line
-        prepend-icon="email"
-      ></v-text-field>
+          <v-text-field
+            name="name"
+            v-model="mutableCategory.name"
+            label="Nombre"
+            single-line
+          ></v-text-field>
 
-      <v-btn @click.stop="saveCategory">
-        click
-      </v-btn>
-    </v-form>
-
-
-  </div>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" flat @click.native="close">Close</v-btn>
+        <v-btn color="blue darken-1" flat @click.native="saveCategory">Save</v-btn>
+      </v-card-actions>
+    </v-card>
 
 </template>
 
@@ -34,10 +38,14 @@ export default {
   data(){
     return {
       mutableCategory: this.category,
-      valid: false
+      valid: false,
+      title: 'Nueva categoría'
     }
   },
   methods:{
+    close(){
+      this.$emit('onCanceled')
+    },
     saveCategory(){
       api.postCategory(this.mutableCategory)
       .then(res => {
