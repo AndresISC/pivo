@@ -3,10 +3,7 @@
   <v-form v-model="valid" ref="form" width="100%" @submit.prevent="submitt" action="http://localhost/settlements" method="post">
     <v-container fluid grid-list-md class="pa-4" >
 
-      <input ref="imageInput" type="file" hidden @change="onPhotoUploaded">
-      <v-flex xs6 offset-xs3  class="text-xs-center">
-        <img :src="getImage" width="100%" height="200px" @click.stop="click">
-      </v-flex>
+      <app-image-picker v-model="mutableSettlement.image"></app-image-picker>
 
       <v-flex xs12 >
         <v-text-field
@@ -122,7 +119,6 @@
 
       </div>
 
-
       <v-btn type="submit">
         click
       </v-btn>
@@ -132,14 +128,16 @@
 </template>
 
 <script>
-import imageUtils from '../../utils/ImageUtils'
 import api from '../../api/Settlement'
+import imagePicker from '../shared/ImagePicker.vue'
 export default {
   props:['settlement'],
+  components:{
+    'app-image-picker': imagePicker
+  },
   data(){
     return{
       valid: false,
-      image: null,
       mutableSettlement: this.settlement,
       categories: [],
     }
@@ -157,19 +155,7 @@ export default {
         console.log(err);
       })
     },
-    click(){
-      this.$refs.imageInput.click()
-    },
-    onPhotoUploaded(e){
-      if(e.target.files.length > 0){
-        this.mutableSettlement.image = this.$refs.imageInput.files[0]
-      }else{
-        this.mutableSettlement.image = null
-      }
-      imageUtils.getImageFromTarget(this.$refs.imageInput, image => {
-        this.image = image
-      })
-    },
+
     submitt(data){
       api.postSettlement(this.mutableSettlement)
       .then(res => {
@@ -179,13 +165,7 @@ export default {
         console.log(err.response.data.errors);
       })
     }
-  },
-  computed:{
-    getImage(){
-      return this.image || "http://ferreteriaelpuente.com.ar/wp-content/uploads/2015/08/sin-imagen.png"
-    }
-  },
-
+  }
 }
 </script>
 

@@ -2,11 +2,7 @@
   <div class="pa-4">
 
     <v-form v-model="valid" ref="form" width="100%">
-      <input ref="imageInput" type="file" hidden @change="onPhotoUploaded">
-
-      <v-flex xs6 offset-xs3  class="text-xs-center">
-        <img :src="getImage" width="100%" height="240px" @click.stop="click">
-      </v-flex>
+      <app-image-picker v-model="mutableCategory.image"></app-image-picker>
 
       <v-text-field
         name="name"
@@ -27,36 +23,21 @@
 </template>
 
 <script>
+import imagePicker from '../../shared/ImagePicker.vue'
 import api from '../../../api/Settlement'
 import imageUtils from '../../../utils/ImageUtils'
 export default {
   props: ['category'],
+  components:{
+    'app-image-picker': imagePicker
+  },
   data(){
     return {
-      image: null,
       mutableCategory: this.category,
       valid: false
     }
   },
-  computed:{
-    getImage(){
-      return this.image || "http://ferreteriaelpuente.com.ar/wp-content/uploads/2015/08/sin-imagen.png"
-    }
-  },
   methods:{
-    click(){
-      this.$refs.imageInput.click()
-    },
-    onPhotoUploaded(e){
-      if(e.target.files.length > 0){
-        this.mutableCategory.image = this.$refs.imageInput.files[0]
-      }else{
-        this.mutableCategory.image = null
-      }
-      imageUtils.getImageFromTarget(this.$refs.imageInput, image => {
-        this.image = image
-      })
-    },
     saveCategory(){
       api.postCategory(this.mutableCategory)
       .then(res => {
@@ -69,6 +50,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-</style>

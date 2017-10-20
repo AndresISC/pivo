@@ -2,11 +2,7 @@
   <div class="pa-4">
 
     <v-form v-model="valid" ref="form" width="100%">
-      <input ref="imageInput" type="file" hidden @change="onPhotoUploaded">
-
-      <v-flex xs6 offset-xs3  class="text-xs-center">
-        <img :src="getImage" width="100%" height="240px" @click.stop="click">
-      </v-flex>
+      <app-image-picker v-model="promotion.image"></app-image-picker>
 
       <app-date-picker
         :date.sync="promotion.startDate"
@@ -40,8 +36,10 @@
 
 <script>
 import datePicker from '../../shared/DatePicker.vue'
+import imagePicker from '../../shared/imagePicker.vue'
 import imageUtils from '../../../utils/ImageUtils'
 import api from '../../../api/Settlement'
+
 export default {
   props: {
     promotion: {
@@ -54,35 +52,15 @@ export default {
     }
   },
   components:{
-    'app-date-picker': datePicker
+    'app-date-picker': datePicker,
+    'app-image-picker': imagePicker
   },
   data(){
     return {
-        valid: false,
-        image: null
-    }
-  },
-  computed:{
-    getImage(){
-      return this.image || "http://ferreteriaelpuente.com.ar/wp-content/uploads/2015/08/sin-imagen.png"
+        valid: false
     }
   },
   methods:{
-    click(){
-      this.$refs.imageInput.click()
-    },
-
-    onPhotoUploaded(e){
-      if(e.target.files.length > 0){
-        this.promotion.image = this.$refs.imageInput.files[0]
-      }else{
-        this.promotion.image = null
-      }
-      imageUtils.getImageFromTarget(this.$refs.imageInput, image => {
-        this.image = image
-      })
-    },
-
     savePromotion(){
       api.postPromotion(this.sid, this.promotion)
       .then(res => {
@@ -97,16 +75,7 @@ export default {
 </script>
 
 <style lang="css">
-
-.hide{
-  display: none;
-}
-
-img {
-  border-radius: 10px;
-  width:200px;
-  height:200px;
-  /*width: auto;
-  height: auto;*/
-}
+  .hide{
+    display: none;
+  }
 </style>
