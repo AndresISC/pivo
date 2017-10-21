@@ -21,8 +21,8 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
-            <v-layout v-if="categories.length > 0"  row wrap>
-              <v-flex d-flex xs4 v-for="(category, index) in categories" :key="category.id">
+            <v-layout v-if="$store.state.categories.length > 0"  row wrap>
+              <v-flex d-flex xs4 v-for="(category, index) in $store.state.categories" :key="category.id">
                 <app-category
                   @onCategoryDeleted="deleteCategory"
                   :category="category" :i="index"/>
@@ -46,7 +46,7 @@ export default {
   },
   data(){
     return {
-      categories: []
+
     }
   },
   mounted(){
@@ -54,16 +54,12 @@ export default {
   },
   methods:{
     getCategories(){
-      api.getCategories()
-      .then(res => {
-        this.categories = res.data.payload.categories
-      })
-      .catch(err => {
-        console.log(err);
-      })
+      this.$store.dispatch('getCategories')
     },
     deleteCategory(payload){
-      this.categories.splice(payload.i, 1)
+      this.$store.commit('removeCategory',{
+        index: payload.index
+      })
     },
     onNewCategory(){
       this.$emit('onNewCategory')

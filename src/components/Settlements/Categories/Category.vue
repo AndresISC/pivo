@@ -4,7 +4,7 @@
       <v-layout row>
         <v-flex xs3>
           <img
-            :src="category.imagePath"
+            :src="category.imageUrl"
             height="70px"
           />
         </v-flex>

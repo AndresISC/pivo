@@ -3,7 +3,7 @@
     <app-categories-list @onNewCategory="right=true">
     </app-categories-list>
 
-    <v-dialog v-model="right" persistent max-width="500px">
+    <v-dialog v-model="display" persistent max-width="500px">
 
       <app-category @onCanceled="right=false" :category="{image: null, name: null}">
       </app-category>
@@ -23,6 +23,11 @@ export default {
   data(){
     return {
       right: null
+    }
+  },
+  computed:{
+    display(){
+      return this.right || this.$store.state.success === false
     }
   }
 }

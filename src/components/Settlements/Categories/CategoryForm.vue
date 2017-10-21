@@ -20,8 +20,19 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" flat @click.native="close">Close</v-btn>
-        <v-btn color="blue darken-1" flat @click.native="saveCategory">Save</v-btn>
+        <v-btn color="blue darken-1" flat @click.stop="saveCategory">Save</v-btn>
       </v-card-actions>
+
+      <v-snackbar
+        :timeout="3000"
+        :bottom="true"
+        v-model="snackbar"
+        v-if="snackbar"
+      >
+        {{ $store.state.status.message }}
+        <v-btn flat color="pink" @click.native="snackbar = null">Close</v-btn>
+      </v-snackbar>
+
     </v-card>
 
 </template>
@@ -30,10 +41,17 @@
 import imagePicker from '../../shared/ImagePicker.vue'
 import api from '../../../api/Settlement'
 import imageUtils from '../../../utils/ImageUtils'
+
 export default {
   props: ['category'],
   components:{
-    'app-image-picker': imagePicker
+    'app-image-picker': imagePicker,
+  },
+  computed:{
+    snackbar:{
+      get()      { return this.$store.getters.hasStatus },
+      set(value) { this.$store.commit('setStatus',{status: value}) }
+    }
   },
   data(){
     return {
@@ -47,13 +65,10 @@ export default {
       this.$emit('onCanceled')
     },
     saveCategory(){
-      api.postCategory(this.mutableCategory)
-      .then(res => {
-        console.log(res);
+      this.$store.dispatch('postCategory', {
+        category: this.mutableCategory
       })
-      .catch(err => {
-        console.log(err);
-      })
+
     }
   }
 }

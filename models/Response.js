@@ -1,11 +1,11 @@
 class ApiError{
   static createServerError(){
-    return new ApiError("Server Error. Try again later.", "serverError")
+    return new ApiError("serverError","Server Error. Try again later." )
   }
-  constructor(message, type, path, value){
-    this.message = message
-    this.type = type
-    this.path = path
+  constructor(code, detail, source, value){
+    this.code = code
+    this.detail = detail
+    this.source = source
     this.value = value
   }
 }

@@ -39,14 +39,17 @@ function putCategory(req, res){
   })
 }
 
-function postCategory(req, res){
+function postCategory(req, res, next){
   SettlementCategory.create(req.body, {files: req.files})
   .then(category => {
-    res.send(category)
+    var response = {
+      message: "Successful category creation",
+      payload: category
+    }
+    res.status(201).send(response)
   })
   .catch(err => {
-    console.log(err);
-    res.send(err)
+    next(err)
   })
 }
 

@@ -15,10 +15,13 @@ var users = require('./routes/users');
 var settlements = require('./routes/settlements')
 var promotions = require('./routes/promotions')
 var photos = require('./routes/gallery')
+var errorParser = require('./utils/ErrorParser')
 
 var bootstrap = require('./models/bootstrap')
 
 var app = express();
+
+var { Response, ApiError } = require('./models/Response')
 
 //Check if the database is already created and sync it. If it doesn't exist, then create it.
 //CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
@@ -60,8 +63,15 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handler
 app.use(function(err, req, res, next) {
+  if(err.name == 'SequelizeValidationError'){
+    var response = errorParser.parseValidationError(err)
+    res.status(422).send(response)
+  }
+});
+
+// error handler
+/*app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -69,6 +79,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
+});*/
 
 module.exports = app;

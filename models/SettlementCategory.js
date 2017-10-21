@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     image: { type: DataTypes.STRING },
-    imagePath: {
+    imageUrl: {
       type: new DataTypes.VIRTUAL(DataTypes.String, ['image']),
       get: function() { return utils.generateURL(this.image) }
     }
