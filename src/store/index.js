@@ -1,18 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import api from '../api/Settlement'
+import errorParser from '../utils/ErrorParser'
+import Error from '../utils/Error'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     categories: [],
-    error: null,
+    errors: new Error(),
     status: null
   },
   getters:{
-    hasStatus: state =>{
+    getStatus: state =>{
       return state.status
+    },
+    isFailed: state => {
+      if (state.status){
+        return state.status.type === 'failure'
+      }else{
+        return false
+      }
+    },
+    isSuccess: state => {
+      if (state.status){
+        return state.status.type === 'success'
+      }else{
+        return false
+      }
     }
   },
   mutations: {
@@ -25,8 +41,8 @@ export default new Vuex.Store({
     setCategories(state, payload){
       state.categories = payload.categories
     },
-    setError(state, payload){
-      state.error = payload.error
+    setErrors(state, payload){
+      state.errors = payload.errors
     },
     setStatus(state, payload){
       var status = payload.status
@@ -35,6 +51,9 @@ export default new Vuex.Store({
       }else{
         state.status = null
       }
+    },
+    clearError(state, payload){
+      state.errors.clear(payload.key)
     }
   },
   actions:{
@@ -54,7 +73,20 @@ export default new Vuex.Store({
         commit('setStatus', { status: {type: 'success', message: 'Creacion exitosa'} })
       })
       .catch(err => {
-        commit('setError', { error: err })
+        console.log(err);
+        commit('setErrors', { errors: errorParser.parse(err.response.data.errors) })
+        commit('setStatus', { status: {type: 'failure', message: 'Ha ocurrido un error'} })
+      })
+    },
+    deleteCategory({commit}, payload){
+      api.deleteCategory(payload.categoryId)
+      .then(res => {
+        commit('removeCategory',{ index: payload.index })
+        commit('setStatus', { status: {type: 'success', message: 'Borrado exitoso'} })
+      })
+      .catch(err => {
+
+        commit('setErrors', { errors: err })
         commit('setStatus', { status: {type: 'failure', message: 'Ha ocurrido un error'} })
       })
     }

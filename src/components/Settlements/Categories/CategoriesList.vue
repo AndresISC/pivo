@@ -24,7 +24,6 @@
             <v-layout v-if="$store.state.categories.length > 0"  row wrap>
               <v-flex d-flex xs4 v-for="(category, index) in $store.state.categories" :key="category.id">
                 <app-category
-                  @onCategoryDeleted="deleteCategory"
                   :category="category" :i="index"/>
               </v-flex>
             </v-layout>
@@ -38,16 +37,11 @@
 </template>
 
 <script>
-import api from '../../../api/Settlement'
+
 import category from './Category.vue'
 export default {
   components:{
     'app-category': category
-  },
-  data(){
-    return {
-
-    }
   },
   mounted(){
     this.getCategories()
@@ -55,11 +49,6 @@ export default {
   methods:{
     getCategories(){
       this.$store.dispatch('getCategories')
-    },
-    deleteCategory(payload){
-      this.$store.commit('removeCategory',{
-        index: payload.index
-      })
     },
     onNewCategory(){
       this.$emit('onNewCategory')

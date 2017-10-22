@@ -5,7 +5,7 @@
         <span class="headline"> {{ title }} </span>
       </v-card-title>
       <v-card-text>
-        <v-form v-model="valid" ref="form" width="100%">
+        <v-form v-model="valid" ref="form" width="100%" >
           <app-image-picker v-model="mutableCategory.image"></app-image-picker>
 
           <v-text-field
@@ -13,8 +13,10 @@
             v-model="mutableCategory.name"
             label="Nombre"
             single-line
+            :error-messages="$store.state.errors.get('name')"
+            :rules="nameRules"
+            @change.native="some"
           ></v-text-field>
-
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -27,10 +29,10 @@
         :timeout="3000"
         :bottom="true"
         v-model="snackbar"
-        v-if="snackbar"
+        v-if="getStatus"
       >
         {{ $store.state.status.message }}
-        <v-btn flat color="pink" @click.native="snackbar = null">Close</v-btn>
+        <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
       </v-snackbar>
 
     </v-card>
@@ -41,23 +43,45 @@
 import imagePicker from '../../shared/ImagePicker.vue'
 import api from '../../../api/Settlement'
 import imageUtils from '../../../utils/ImageUtils'
+import rules from '../../../utils/Rules'
+
+import { mapGetters } from 'vuex'
 
 export default {
   props: ['category'],
   components:{
     'app-image-picker': imagePicker,
   },
-  computed:{
-    snackbar:{
-      get()      { return this.$store.getters.hasStatus },
-      set(value) { this.$store.commit('setStatus',{status: value}) }
+  computed: {
+    nameRules(){
+      return [
+        rules.isEmpty(this.mutableCategory.name)
+      ]
+    },
+    ...mapGetters([
+      'getStatus',
+      'isFailed',
+      'isSuccess'
+    ])
+  },
+  watch:{
+    getStatus(val){
+      if(val){
+        this.snackbar = (this.isFailed)
+        if(this.isSuccess){
+          this.$emit('onCanceled')
+        }
+      }else{
+        this.snackbar = false
+      }
     }
   },
   data(){
     return {
       mutableCategory: this.category,
       valid: false,
-      title: 'Nueva categoría'
+      title: 'Nueva categoría',
+      snackbar: false
     }
   },
   methods:{
@@ -65,10 +89,14 @@ export default {
       this.$emit('onCanceled')
     },
     saveCategory(){
-      this.$store.dispatch('postCategory', {
-        category: this.mutableCategory
-      })
-
+      if (this.$refs.form.validate()){
+        this.$store.dispatch('postCategory', {
+          category: this.mutableCategory
+        })
+      }
+    },
+    some(a){
+      this.$store.commit('clearError', a.target.name)
     }
   }
 }

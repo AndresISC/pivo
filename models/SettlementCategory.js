@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        name: "nameaaaa",
+        column: "aaaeee"
+      },
       validate: {
         notEmpty: true
       }

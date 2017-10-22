@@ -30,22 +30,14 @@
 </template>
 
 <script>
-import api from '../../../api/Settlement'
+
 export default {
   props:['category', 'i'],
   methods:{
     deleteCategory(){
-      api.deleteCategory(this.category.id)
-      .then(res => {
-        var payload = {
-          category: this.category,
-          index: this.i
-        }
-        this.$emit('onCategoryDeleted', payload)
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
+      this.$store.dispatch('deleteCategory', {
+        categoryId: this.category.id,
+        index: this.i
       })
     }
   }
@@ -53,9 +45,9 @@ export default {
 </script>
 
 <style lang="css">
-.category-container:hover{
-  background-color: #eceff1 ;
-}
-.hidden { display:none; }
-.category-container:hover .hidden { display:block; }
+  .category-container:hover{
+    background-color: #eceff1 ;
+  }
+  .hidden { display:none; }
+  .category-container:hover .hidden { display:block; }
 </style>

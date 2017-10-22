@@ -25,7 +25,7 @@ var { Response, ApiError } = require('./models/Response')
 
 //Check if the database is already created and sync it. If it doesn't exist, then create it.
 //CAUTION: using { force: true } will drop all the tables and recreate them. Use carefully.
-bootstrap.load({force: false})
+bootstrap.load({force: true})
 
 
 // view engine setup
@@ -64,10 +64,19 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(err, req, res, next) {
-  if(err.name == 'SequelizeValidationError'){
-    var response = errorParser.parseValidationError(err)
-    res.status(422).send(response)
+
+  switch(err.name){
+    case 'SequelizeValidationError':
+      var response = errorParser.parseValidationError(err)
+      res.status(422).send(response)
+      break
+    case 'SequelizeUniqueConstraintError':
+      var response = errorParser.parseUniqueConstraintError(err)
+      res.status(422).send(response)
+      break
+
   }
+  console.log(err.type);
 });
 
 // error handler

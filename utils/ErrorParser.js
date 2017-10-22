@@ -10,12 +10,17 @@ module.exports = {
         value: e.value
       }
     })
-    
+
     var response = {
       message: "Validation Error",
       errors: errors
     }
 
     return response
+  },
+
+  parseUniqueConstraintError: function(err){
+    console.log(err);
+    console.error(err.msg);
   }
 }

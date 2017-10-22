@@ -1,4 +1,4 @@
-class Errors {
+export default class Errors {
     /**
      * Create a new Errors instance.
      */
@@ -32,7 +32,7 @@ class Errors {
      */
     get(field) {
         if (this.errors[field]) {
-            return [this.errors[field].msg];
+            return [this.errors[field].detail];
         }
     }
 
@@ -57,8 +57,8 @@ class Errors {
             delete this.errors[field];
 
             return;
+        }else{
+            this.errors = {};
         }
-
-        this.errors = {};
     }
 }
