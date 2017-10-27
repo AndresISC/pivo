@@ -1,3 +1,4 @@
+import Vue from 'vue'
 export default class Errors {
     /**
      * Create a new Errors instance.
@@ -42,8 +43,8 @@ export default class Errors {
      *
      * @param {object} errors
      */
-    record(errors) {
-        this.errors = errors;
+    record(newErrors) {
+      Vue.set(this,'errors', newErrors)
     }
 
 
@@ -54,11 +55,9 @@ export default class Errors {
      */
     clear(field) {
         if (field) {
-            delete this.errors[field];
-
-            return;
+            Vue.delete(this.errors, field)
         }else{
-            this.errors = {};
+            Vue.set(this, 'errors', {})
         }
     }
 }

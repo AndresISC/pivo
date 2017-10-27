@@ -38,6 +38,7 @@ jspm_packages/
 
 # Uploaded images
 public/images/
+firefox-esr_root
 
 # Typescript v1 declaration files
 typings/

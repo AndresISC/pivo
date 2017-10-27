@@ -21,8 +21,8 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
-            <v-layout v-if="$store.state.categories.length > 0"  row wrap>
-              <v-flex d-flex xs4 v-for="(category, index) in $store.state.categories" :key="category.id">
+            <v-layout v-if="$store.state.categories.categories.length > 0"  row wrap>
+              <v-flex d-flex xs4 v-for="(category, index) in $store.state.categories.categories" :key="category.id">
                 <app-category
                   :category="category" :i="index"/>
               </v-flex>
@@ -39,15 +39,16 @@
 <script>
 
 import category from './Category.vue'
+import { mapGetters } from 'vuex'
 export default {
   components:{
     'app-category': category
   },
   mounted(){
-    this.getCategories()
+    this.loadCategories()
   },
   methods:{
-    getCategories(){
+    loadCategories(){
       this.$store.dispatch('getCategories')
     },
     onNewCategory(){

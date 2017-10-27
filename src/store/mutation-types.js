@@ -1,0 +1,6 @@
+export const ADD_CATEGORY = 'ADD_CATEGORY'
+export const REMOVE_CATEGORY = 'REMOVE_CATEGORY'
+export const SET_CATEGORIES = 'SET_CATEGORIES'
+export const SET_ERRORS = 'SET_ERRORS'
+export const SET_STATUS = 'SET_STATUS'
+export const CLEAR_ERROR = 'CLEAR_ERROR'

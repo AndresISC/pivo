@@ -5,17 +5,15 @@
         <span class="headline"> {{ title }} </span>
       </v-card-title>
       <v-card-text>
-        <v-form v-model="valid" ref="form" width="100%" >
+        <v-form v-model="valid" ref="form" width="100%" @change.native="clearError">
           <app-image-picker v-model="mutableCategory.image"></app-image-picker>
-
           <v-text-field
             name="name"
             v-model="mutableCategory.name"
             label="Nombre"
             single-line
-            :error-messages="$store.state.errors.get('name')"
+            :error-messages="getError('name')"
             :rules="nameRules"
-            @change.native="some"
           ></v-text-field>
         </v-form>
       </v-card-text>
@@ -31,7 +29,7 @@
         v-model="snackbar"
         v-if="getStatus"
       >
-        {{ $store.state.status.message }}
+        {{ $store.state.categories.status.message }}
         <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
       </v-snackbar>
 
@@ -44,7 +42,7 @@ import imagePicker from '../../shared/ImagePicker.vue'
 import api from '../../../api/Settlement'
 import imageUtils from '../../../utils/ImageUtils'
 import rules from '../../../utils/Rules'
-
+import { CLEAR_ERROR } from '../../../store/mutation-types'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -61,18 +59,15 @@ export default {
     ...mapGetters([
       'getStatus',
       'isFailed',
-      'isSuccess'
+      'isSuccess',
+      'getError'
     ])
   },
   watch:{
     getStatus(val){
-      if(val){
-        this.snackbar = (this.isFailed)
-        if(this.isSuccess){
-          this.$emit('onCanceled')
-        }
-      }else{
-        this.snackbar = false
+      this.snackbar = this.isFailed
+      if(this.isSuccess){
+        this.close()
       }
     }
   },
@@ -90,13 +85,11 @@ export default {
     },
     saveCategory(){
       if (this.$refs.form.validate()){
-        this.$store.dispatch('postCategory', {
-          category: this.mutableCategory
-        })
+        this.$store.dispatch('postCategory', { category: this.mutableCategory })
       }
     },
-    some(a){
-      this.$store.commit('clearError', a.target.name)
+    clearError(e){
+      this.$store.commit(CLEAR_ERROR, { key: e.target.name })
     }
   }
 }

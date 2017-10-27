@@ -17,10 +17,5 @@ module.exports = {
     }
 
     return response
-  },
-
-  parseUniqueConstraintError: function(err){
-    console.log(err);
-    console.error(err.msg);
   }
 }
