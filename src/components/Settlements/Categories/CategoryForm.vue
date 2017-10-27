@@ -43,7 +43,7 @@ import api from '../../../api/Settlement'
 import imageUtils from '../../../utils/ImageUtils'
 import rules from '../../../utils/Rules'
 import { CLEAR_ERROR } from '../../../store/mutation-types'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions, mapMutations} from 'vuex'
 
 export default {
   props: ['category'],
@@ -56,7 +56,7 @@ export default {
         rules.isEmpty(this.mutableCategory.name)
       ]
     },
-    ...mapGetters([
+    ...mapGetters('categories',[
       'getStatus',
       'isFailed',
       'isSuccess',
@@ -80,16 +80,18 @@ export default {
     }
   },
   methods:{
+    ...mapMutations('categories', [ CLEAR_ERROR ]),
+    ...mapActions('categories',[ 'postCategory' ]),
     close(){
-      this.$emit('onCanceled')
+      this.$emit('onClosed')
     },
     saveCategory(){
       if (this.$refs.form.validate()){
-        this.$store.dispatch('postCategory', { category: this.mutableCategory })
+        this.postCategory({ category: this.mutableCategory })
       }
     },
     clearError(e){
-      this.$store.commit(CLEAR_ERROR, { key: e.target.name })
+      this[CLEAR_ERROR]({ key: e.target.name })
     }
   }
 }

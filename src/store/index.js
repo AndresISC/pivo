@@ -2,11 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import categories from './modules/categories'
+import settlements from './modules/settlements'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules:{
-    categories
+    categories,
+    settlements
   }
 })

@@ -39,18 +39,16 @@
 <script>
 
 import category from './Category.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components:{
     'app-category': category
   },
   mounted(){
-    this.loadCategories()
+    this.getCategories()
   },
   methods:{
-    loadCategories(){
-      this.$store.dispatch('getCategories')
-    },
+    ...mapActions('categories',['getCategories']),
     onNewCategory(){
       this.$emit('onNewCategory')
     }

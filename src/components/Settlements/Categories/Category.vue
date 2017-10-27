@@ -19,7 +19,7 @@
           </v-btn>
         </v-flex>
         <v-flex xs1 class="hidden">
-          <v-btn icon @click.stop="deleteCategory">
+          <v-btn icon @click.stop="delCategory">
             <v-icon>delete</v-icon>
           </v-btn>
         </v-flex>
@@ -30,12 +30,13 @@
 </template>
 
 <script>
-
+import {mapActions} from 'vuex'
 export default {
   props:['category', 'i'],
   methods:{
-    deleteCategory(){
-      this.$store.dispatch('deleteCategory', {
+    ...mapActions('categories', [ 'deleteCategory' ]),
+    delCategory(){
+      this.deleteCategory({
         categoryId: this.category.id,
         index: this.i
       })

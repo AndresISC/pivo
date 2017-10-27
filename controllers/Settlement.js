@@ -13,7 +13,7 @@ function getSettlements(req, res){
   })
 }
 
-function postSettlement(req, res){
+function postSettlement(req, res, next){
 
   var settlement = Settlement.build(req.body)
   if (req.body.categoryId){
@@ -27,9 +27,7 @@ function postSettlement(req, res){
     res.status(201).send(response)
   })
   .catch( err => {
-    console.log(err);
-    var response = Response.createErrorResponse("Validation failed", err)
-    res.status(422).send(response)
+    next(err)
   })
 }
 
@@ -68,9 +66,7 @@ function deleteSettlement(req, res){
     }
   })
   .catch(err => {
-    console.log(err);
-    var response = Response.createServerErrorResponse()
-    res.status(501).send(response)
+    next(err)
   })
 }
 

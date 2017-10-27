@@ -8,7 +8,7 @@ import * as globalGetters from '../getters'
 const namespaced = true
 
 const state = {
-  categories: [],
+  settlements: [],
   errors: new Error(),
   status: null
 }
@@ -18,32 +18,32 @@ const getters = {
 }
 
 const mutations ={
-  [types.SET_CATEGORIES](state, payload){
-    state.categories = payload.categories
+  [types.SET_SETTLEMENTS](state, payload){
+    state.settlements = payload.settlements
   },
-  [types.ADD_CATEGORY] (state, payload) {
-    state.categories.push(payload.category)
+  [types.ADD_SETTLEMENT] (state, payload) {
+    state.settlements.push(payload.settlement)
   },
-  [types.REMOVE_CATEGORY](state, payload){
-    state.categories.splice(payload.index, 1)
+  [types.REMOVE_SETTLEMENT](state, payload){
+    state.settlements.splice(payload.index, 1)
   },
   ...globalMutations
 }
 
 const actions = {
-  getCategories({commit}){
-    api.getCategories()
+  getSettlements({commit}){
+    api.getSettlements()
     .then(res => {
-      commit(types.SET_CATEGORIES, { categories: res.data.payload.categories })
+      commit(types.SET_SETTLEMENTS, { settlements: res.data.payload.settlements })
     })
     .catch(err => {
       console.log(err);
     })
   },
-  postCategory({commit}, payload){
-    api.postCategory(payload.category)
+  postSettlement({commit}, payload){
+    api.postSettlement(payload.settlement)
     .then(res => {
-      commit(types.ADD_CATEGORY,{ category: res.data.payload })
+      commit(types.ADD_SETTLEMENT,{ settlement: res.data.payload })
       commit(types.SET_STATUS, { status: {type: 'success', message: 'Creacion exitosa'} })
     })
     .catch(err => {
@@ -51,10 +51,10 @@ const actions = {
       commit(types.SET_STATUS, { status: {type: 'failure', message: 'Ha ocurrido un error'} })
     })
   },
-  deleteCategory({commit}, payload){
-    api.deleteCategory(payload.categoryId)
+  deleteSettlement({commit}, payload){
+    api.deleteSettlement(payload.settlementId)
     .then(res => {
-      commit(types.REMOVE_CATEGORY,{ index: payload.index })
+      commit(types.REMOVE_SETTLEMENT,{ index: payload.index })
       commit(types.SET_STATUS, { status: {type: 'success', message: 'Borrado exitoso'} })
     })
     .catch(err => {

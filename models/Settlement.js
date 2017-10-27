@@ -7,16 +7,24 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate:{
-        notEmpty: true
+        notEmpty: {
+          msg: "Name cannot be empty"
+        }
       }
     },
     email:{
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        msg: 'Email already taken'
+      },
       allowNull: false,
       validate: {
-        isEmail: true,
-        notEmpty: true
+        isEmail: {
+          msg: "Incorrect email format"
+        },
+        notEmpty: {
+          msg: "Email cannot be empty"
+        }
       }
     },
     phone: {
@@ -27,12 +35,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     url: {
       type: DataTypes.STRING,
-      validate: { isUrl: true }
+      validate: {
+        isUrl: { msg: "Incorrect URL format" }
+      }
     },
     facebookUrl: {
       type: DataTypes.STRING,
       field: 'facebook_url',
-      validate: { isUrl: true }
+      validate: {
+        isUrl: { msg: "Incorrect URL format" }
+      }
     },
 
     latitude: {

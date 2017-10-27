@@ -1,6 +1,6 @@
 <template lang="html">
 
-  <v-form v-model="valid" ref="form" width="100%" @submit.prevent="submitt" action="http://localhost/settlements" method="post">
+  <v-form v-model="valid" ref="form" width="100%" @change.native="clearError" @submit.prevent="submitt" action="http://localhost/settlements" method="post">
     <v-container fluid grid-list-md class="pa-4" >
 
       <app-image-picker v-model="mutableSettlement.image"></app-image-picker>
@@ -12,6 +12,7 @@
           label="Nombre"
           single-line
           prepend-icon="business"
+          :error-messages="getError('name')"
         ></v-text-field>
       </v-flex>
 
@@ -45,6 +46,7 @@
           v-model="mutableSettlement.email"
           label="Email"
           single-line
+            :error-messages="getError('email')"
           prepend-icon="email"
         ></v-text-field>
       </v-flex>
@@ -61,9 +63,10 @@
 
       <v-flex xs12 >
         <v-text-field
-          name="phone"
+          name="url"
           v-model="mutableSettlement.url"
           label="Sitio web"
+            :error-messages="getError('url')"
           single-line
           prepend-icon="public"
         ></v-text-field>
@@ -71,8 +74,9 @@
 
       <v-flex xs12 >
         <v-text-field
-          name="phone"
+          name="facebookUrl"
           v-model="mutableSettlement.facebookUrl"
+            :error-messages="getError('facebookUrl')"
           label="Facebook"
           single-line
           prepend-icon="group"
@@ -130,10 +134,29 @@
 <script>
 import api from '../../api/Settlement'
 import imagePicker from '../shared/ImagePicker.vue'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import {CLEAR_ERROR} from '../../store/mutation-types'
+
 export default {
   props:['settlement'],
   components:{
     'app-image-picker': imagePicker
+  },
+  computed:{
+    ...mapGetters('settlements',[
+      'getStatus',
+      'isFailed',
+      'isSuccess',
+      'getError'
+    ])
+  },
+  watch:{
+    getStatus(val){
+      //this.snackbar = this.isFailed
+      if(this.isSuccess){
+        this.close()
+      }
+    }
   },
   data(){
     return{
@@ -146,6 +169,8 @@ export default {
     this.getCategories()
   },
   methods:{
+    ...mapActions('settlements', [ 'postSettlement' ]),
+    ...mapMutations('settlements', [ CLEAR_ERROR ]),
     getCategories(){
       api.getCategories()
       .then(res => {
@@ -157,13 +182,14 @@ export default {
     },
 
     submitt(data){
-      api.postSettlement(this.mutableSettlement)
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err.response.data.errors);
-      })
+      this.postSettlement({ settlement: this.mutableSettlement })
+    },
+
+    close(){
+      this.$emit('onClosed')
+    },
+    clearError(e){
+      this[CLEAR_ERROR]({ key: e.target.name })
     }
   }
 }
