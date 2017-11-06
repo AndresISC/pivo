@@ -13,7 +13,7 @@
 								</v-toolbar-title>
 							</v-toolbar>
 						  <v-card-title primary-title>
-						    <div class="subheading">{{ inputs }}</div>
+						    <div class="subheading">{{ inputs }} {{ error_message }}</div>
 						  </v-card-title>
 						    <v-form ref='loginForm'>
 						    	<v-container grid-list-md text-xs-center>
@@ -46,7 +46,7 @@
 						    </v-form>
 							<v-card-actions class="pink lighten-1 white--text pa-2">
 								<v-btn
-								@click="loginAttempt"
+								@click='tryLogin'
 								flat dark>{{ enter }}
 								 <v-icon right dark>send</v-icon>
 								</v-btn>
@@ -58,8 +58,8 @@
 						      :multi-line="true"
 						      :error="true"
 						      :vertical="mode === 'vertical'"
-						      v-model="wrongLogin">
-						      {{ snackbar_text }}
+						      v-model="loginStatus">
+						      {{ message }}
 						    </v-snackbar>
 						</v-card>
 					</v-flex>
@@ -81,43 +81,42 @@
 	      login: 'Inicio de sesión',
 	      inputs: 'Indica tus credenciales',
 	      enter: 'Entrar',
-	      snackbar_text: '',
+	      message: '',
 	      username:'',
 	      password:'',
 	      passwordField: true,
-	      wrongLogin:false,
+	      loginStatus:false,
 	      valid:false,
 				mode: 'vertical'
 	    }
 	  },
+	  computed:{
+	  	error_message(){
+	  	}
+	  },
 	  methods:{
-	  	loginAttempt () {
+	  	tryLogin(){
+	  		this.loginStatus = false
 	  		if(!(this.username.length>0) || !(this.password.length>0))
-	  			this.snackbar_text = 'Indica tu usuario y contraseña'
-			if (this.$refs.loginForm.validate()) {
-
+	  			this.snackbarMessage = 'Indica tu usuario y contraseña'
+	  		if (this.$refs.loginForm.validate()) {
 	          	let	params = {
 		  			email: this.username,
 		  			password: this.password
 		  		};
-		  		userLogin.userLogin(params)
-		  		.then(data => {
-		  		let userToken = data.data.payload.token;
-		  		if( userToken.length > 0 ){
-		  			this.$router.push({name:'home',params:{token:userToken}})
-		  		}
-	  			else
-	  				if(!(token.length>0))
-	  					this.snackbar_text = 'Usuario y contraseña incorrectos'
-	  				else
-	  					this.snackbar_text = 'Algo pasó mal'
-		  		})
-		  		.catch(data => {
-	  					this.snackbar_text = 'Se presentó un error'
+		  		this.$store.dispatch('loginAttempt',params).
+		  		then( response => {
+		  			this.loginStatus = response.status
+		  			this.message = response.message
+		  		}).catch( response => {
+		  			this.loginStatus = response.status
+		  			this.message = response.message
 		  		})
 			}
-	  		this.wrongLogin = true;
-	  	},
+	  	}
+	  },
+	  resetSnackbar(){
+	  	this.loginStatus = false
 	  }
 	}
 

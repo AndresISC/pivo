@@ -17,6 +17,7 @@
 import loginComponent from './components/Login.vue'
 import toolbar from './components/shared/ToolbarWithDrawer.vue'
 import footer from './components/shared/Footer.vue'
+import store from './store/store.js'
 
 export default {
   name: 'app',
@@ -24,7 +25,7 @@ export default {
     'app-toolbar': toolbar,
     'app-footer': footer
   },
-
+  store : store,
   data () {
     return {
       
