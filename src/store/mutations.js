@@ -17,7 +17,3 @@ export const SET_STATUS = (state, {status}) => {
     state.status = null
   }
 }
-
-export const INCREMENT_TEST = (state) =>{
-	state.token++;
-}

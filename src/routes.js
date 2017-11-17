@@ -16,7 +16,7 @@ let routes = [
   },
   {
     name: 'home',
-    path: '/home/:token',
+    path: '/home',
     component: require('./components/UsersTable.vue').default
   },
   {

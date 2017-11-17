@@ -9,13 +9,13 @@
 						<v-card class="white lighten-1 black--text">
 							<v-toolbar class="pink lighten-1 white--text">
 								<v-toolbar-title>
-									{{ login }}
+									{{ login_text }}
 								</v-toolbar-title>
 							</v-toolbar>
 						  <v-card-title primary-title>
-						    <div class="subheading">{{ inputs }} {{ error_message }}</div>
+						    <div class="subheading">{{ inputs_text }}</div>
 						  </v-card-title>
-						    <v-form ref='loginForm'>
+						    <v-form id="form" ref='loginForm'>
 						    	<v-container grid-list-md text-xs-center>
 							    	<v-flex xs11>
 							            <v-text-field
@@ -46,7 +46,7 @@
 						    </v-form>
 							<v-card-actions class="pink lighten-1 white--text pa-2">
 								<v-btn
-								@click='tryLogin'
+								@click='sessionStart'
 								flat dark>{{ enter }}
 								 <v-icon right dark>send</v-icon>
 								</v-btn>
@@ -58,7 +58,7 @@
 						      :multi-line="true"
 						      :error="true"
 						      :vertical="mode === 'vertical'"
-						      v-model="loginStatus">
+						      v-model="snackbar">
 						      {{ message }}
 						    </v-snackbar>
 						</v-card>
@@ -72,51 +72,54 @@
 
 <script>
 
-	import userLogin from '../api/Login'
+	import { mapState } from 'vuex'
 
 	export default {
 	  data(){
 	    return {
-
-	      login: 'Inicio de sesión',
-	      inputs: 'Indica tus credenciales',
+	      login_text: 'Inicio de sesión',
+	      inputs_text: 'Indica tus credenciales',
 	      enter: 'Entrar',
 	      message: '',
-	      username:'',
-	      password:'',
 	      passwordField: true,
-	      loginStatus:false,
+	      snackbar:false,
 	      valid:false,
-				mode: 'vertical'
+		  mode: 'vertical'
 	    }
 	  },
 	  computed:{
-	  	error_message(){
-	  	}
+	  	...mapState({
+	  		loginForm: state => state.login.form
+	  	}),
+	  	username: {
+            get () { return this.loginForm.username },
+            set (value) { this.$store.commit('login/USERNAME', {username: value}) }
+        },
+        password: {
+            get () { return this.loginForm.password },
+            set (value) { this.$store.commit('login/PASSWORD', {password: value}) }
+        }
 	  },
 	  methods:{
-	  	tryLogin(){
-	  		this.loginStatus = false
-	  		if(!(this.username.length>0) || !(this.password.length>0))
-	  			this.snackbarMessage = 'Indica tu usuario y contraseña'
-	  		if (this.$refs.loginForm.validate()) {
-	          	let	params = {
-		  			email: this.username,
-		  			password: this.password
-		  		};
-		  		this.$store.dispatch('loginAttempt',params).
-		  		then( response => {
-		  			this.loginStatus = response.status
-		  			this.message = response.message
-		  		}).catch( response => {
-		  			this.loginStatus = response.status
-		  			this.message = response.message
-		  		})
-			}
+	  	sessionStart(){
+	  		this.$store.dispatch('login/login')
+	  		.then( (response) => {
+	  			if(response.status)
+	  				this.$router.push({path:'home'})
+	  			else
+	  			{
+	  				this.failed(response)
+	  			}
+	  		} )
+	  		.catch( (response) => {
+	  				this.failed(response)
+	  		} )
+	  	},
+	  	failed(response){
+			this.message = response.message
+			this.snackbar = !response.status
+			setTimeout(function(){this.snackbar=false},2000)
 	  	}
-	  },
-	  resetSnackbar(){
-	  	this.loginStatus = false
 	  }
 	}
 

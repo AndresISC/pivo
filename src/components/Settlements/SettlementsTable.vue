@@ -87,13 +87,18 @@
         ]
       }
     },
+    mounted(){
+      this.getDataFromApi()
+    },
     methods: {
       getDataFromApi(){
+      
         this.getSettlements()
         .then(data => {
+          console.log(data)
           var newPage = this.pagination.page + ''
           this.loading= false
-          this.items = data.data
+          this.items = []
           this.totalItems = 21
           this.cachedItems[newPage] = data.data
         })

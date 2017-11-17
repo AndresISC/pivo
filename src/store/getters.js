@@ -21,7 +21,3 @@ export const isSuccess = state => {
 export const getError = state => key => {
   return state.errors.get(key)
 }
-
-export const getIncrement = state =>{
-  return state.token
-}

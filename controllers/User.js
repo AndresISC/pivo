@@ -6,6 +6,7 @@ var imageUtils = require('../utils/ImageUtils')
 function login(req, res){
   const body = req.body
   const email = body.email
+  console.log(body)
   //Find a user with the submitted email
   User.findOne({ where: {email: email} })
   .then(user => {
@@ -26,7 +27,7 @@ function login(req, res){
         }
         else{
           var error = new ApiError("Passwords didn't match", "authError")
-          var response = Response.createErrorResponse("Login failes", {errors: [error]})
+          var response = Response.createErrorResponse("Login failed", {errors: [error]})
           res.status(401).send(response)
         }
       })

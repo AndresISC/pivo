@@ -8,14 +8,15 @@ const Strategy = passportJWT.Strategy
 const params = {
   //Secret word used to code/decode the token.
   secretOrKey: process.env.JWT_SECRET,
-
+  issuer: process.env.JWT_ISSUER,
+  audience: process.env.AUDIENCE,
   //Specify where the token should be extracted from a request.
   //In this specific case, it must be sent in the Authorization Header.
   //Example: auth xxxxxxxx.yyyyyyyy.zzzzzzzz
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('auth')
 }
 
-module.exports = function(){
+function authenticate(){
   //Strategy used to authenticate the user with the token he MUST provide in the Authorization header
   const strategy = new Strategy(params, function(payload, next){
     //Check if the user id, contained in the payload of the token, exists in the database
@@ -30,7 +31,7 @@ module.exports = function(){
       .catch( err => {
         return next(err)
       })
-  })
+})
 
   passport.use(strategy)
 
@@ -45,3 +46,5 @@ module.exports = function(){
     }
   }
 }
+
+module.exports = authenticate
