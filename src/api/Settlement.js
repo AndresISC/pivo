@@ -1,36 +1,37 @@
 import axios from 'axios'
+import { instance } from './Request'
 
 function getSettlements(params){
-  var request = axios.get('http://localhost/settlements', {
+  var request = instance.get('/settlements', {
     params: params
   })
   return request
 }
 
 function getGallery(settlementId){
-  var request = axios.get('http://localhost/settlements/'+settlementId+'/photos')
+  var request = instance.get('/settlements/'+settlementId+'/photos')
   return request
 }
 
 function getPromotions(settlementId){
-  var request = axios.get('http://localhost/settlements/'+settlementId+'/promotions')
+  var request = instance.get('/settlements/'+settlementId+'/promotions')
   return request
 }
 
 function deletePhoto(photoId){
-  var request = axios.delete('http://localhost/photos/'+photoId)
+  var request = instance.delete('/photos/'+photoId)
   return request
 }
 
 function postPhoto(settlementId, photo){
   var formData = new FormData();
   formData.append("image", photo);
-  var request = axios.post('http://localhost/settlements/'+settlementId+'/photos', formData)
+  var request = instance.post('/settlements/'+settlementId+'/photos', formData)
   return request
 }
 
 function deletePromotion(promotionId){
-  var request = axios.delete('http://localhost/promotions/'+promotionId)
+  var request = instance.delete('/promotions/'+promotionId)
   return request
 }
 
@@ -42,7 +43,7 @@ function postPromotion(settlementId, promotion) {
       formData.append(key, promotion[key]);
     }
   }
-  var request = axios.post('http://localhost/settlements/'+settlementId+'/promotions', formData)
+  var request = instance.post('/settlements/'+settlementId+'/promotions', formData)
   return request
 }
 
@@ -54,17 +55,17 @@ function postSettlement(settlement){
     }
   }
 
-  var request = axios.post('http://localhost/settlements/', formData)
+  var request = instance.post('/settlements/', formData)
   return request
 }
 
 function getCategories(){
-  var request = axios.get('http://localhost/settlements/categories')
+  var request = instance.get('/settlements/categories')
   return request
 }
 
 function deleteCategory(categoryId){
-  var request = axios.delete('http://localhost/settlements/categories/' + categoryId)
+  var request = instance.delete('/settlements/categories/' + categoryId)
   return request
 }
 
@@ -76,7 +77,7 @@ function postCategory(category){
     }
   }
 
-  var request = axios.post('http://localhost/settlements/categories/', formData)
+  var request = instance.post('/settlements/categories/', formData)
   return request
 }
 

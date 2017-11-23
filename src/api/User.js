@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { instance } from './Request'
 
 function getUsers(params){
-  var request = axios.get('http://localhost/users', {
+  var request = instance.get('/users', {
     params: params
   })
   return request

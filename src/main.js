@@ -5,7 +5,6 @@ import Event from './utils/EventDispatcher.js'
 import router from './routes'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import store from './store'
 
 window.bus = Event.bus
 
@@ -16,6 +15,5 @@ Vue.use(VueRouter)
 new Vue({
   el: '#app',
   render: h => h(App),
-  store,
   router
 })

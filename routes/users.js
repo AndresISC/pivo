@@ -6,6 +6,7 @@ var Favorites = require('../controllers/Favorites')
 var router = express.Router();
 
 //The next endpoints don't require any authentication yet
+//router.use(auth.authenticate())
 router.get('/',User.getUsers);
 router.post('/', User.postUser)
 router.delete('/:id', User.deleteUser)

@@ -1,7 +1,7 @@
-import axios from 'axios'
+import { instance } from './Request'
 
 function userLogin(params){
-  var request = axios.post('http://localhost/users/login', {
+  var request = instance.post('/users/login', {
     email: params.email,
     password: params.password
   })

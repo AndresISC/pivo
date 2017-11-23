@@ -72,7 +72,7 @@
 
 <script>
 
-	import { mapState } from 'vuex'
+	import { mapState,mapGetters } from 'vuex'
 
 	export default {
 	  data(){
@@ -84,7 +84,7 @@
 	      passwordField: true,
 	      snackbar:false,
 	      valid:false,
-		  mode: 'vertical'
+		  mode: 'vertical',
 	    }
 	  },
 	  computed:{
@@ -118,7 +118,7 @@
 	  	failed(response){
 			this.message = response.message
 			this.snackbar = !response.status
-			setTimeout(function(){this.snackbar=false},2000)
+			setTimeout(function(){ this.snackbar=false },2000)
 	  	}
 	  }
 	}

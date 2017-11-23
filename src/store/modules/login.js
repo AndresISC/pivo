@@ -5,6 +5,7 @@ import createPersistedState from 'vuex-persistedstate'
 const namespaced = true
 
 const state = {
+	namespaced,
 	form:{
 		username: '',
 		password: ''
@@ -13,7 +14,7 @@ const state = {
 		status: null,
 		message: null
 	},
-	token: null
+	token: ''
 }
 
 const mutations = {
@@ -31,6 +32,8 @@ const mutations = {
 	},
 
 	USER_TOKEN : function (store,token) {
+		store.form.username = ''
+		store.form.password = ''
 		store.token = token
 	},
 }
@@ -42,7 +45,6 @@ const actions = {
 					email: context.state.form.username,
 					password: context.state.form.password
 				}
-		console.log(params)
 		return new Promise((resolve,reject) => {
 			userLogin.userLogin(params)
 		  		.then( (data) => {
@@ -66,14 +68,12 @@ const actions = {
 		  			reject(response)
 		  	})
 		})
-
 	}
 }
 
 export default {
-	namespaced:true,
-	state: state,
-	mutations: mutations,
-	actions: actions,
-	plugins: [createPersistedState()]
+	namespaced,
+	state,
+	mutations,
+	actions
 }
